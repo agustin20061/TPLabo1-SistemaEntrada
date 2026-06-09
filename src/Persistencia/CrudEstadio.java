@@ -145,7 +145,9 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 		
 		try {
 			List<Estadio> p  = new ArrayList<>();
-			
+			CrudUbicacion crudUbicacion = new CrudUbicacion();
+			List<Ubicacion>listaUbicacion=new ArrayList<>();
+
 			rs = selectSql(sql);
 			Estadio e;
 			while (rs.next()) {

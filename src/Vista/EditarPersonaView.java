@@ -29,12 +29,14 @@ public class EditarPersonaView {
 	private JLabel dniLabel = new JLabel("Dni");
 	private JTextField dniField = new JTextField();
 	private PersonaServicio personaServicio = new PersonaServicio();
+	private Persona persona;
 	public EditarPersonaView(Persona p) {
-		crearVentana(p);
-		setearBoton(p.getDni());
+		this.persona=p;
+		crearVentana();
+		setearBoton(persona.getDni());
 	}
 	
-	private void crearVentana(Persona p) {
+	private void crearVentana() {
 		frame = new JFrame("Ventana nueva");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -44,22 +46,22 @@ public class EditarPersonaView {
 		frame.getContentPane().setLayout(new FlowLayout());
 		panel.add(mailLabel);
 
-		mailField.setText(p.getMail());
+		mailField.setText(persona.getMail());
 		panel.add(mailField);
 
 		panel.add(contraseniaLabel);
 
-		contraseniaField.setText(p.getContrasenia());
+		contraseniaField.setText(persona.getContrasenia());
 		panel.add(contraseniaField);
 
 		panel.add(nombreLabel);
 
-		nombreField.setText(p.getNombre());
+		nombreField.setText(persona.getNombre());
 		panel.add(nombreField);
 
 		panel.add(apellidoLabel);
 
-		apellidoField.setText(p.getApellido());
+		apellidoField.setText(persona.getApellido());
 		panel.add(apellidoField);
 
 		

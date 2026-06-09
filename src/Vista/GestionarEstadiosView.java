@@ -15,33 +15,32 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import Entidades.Espectaculo;
+import Entidades.Estadio;
 import Entidades.Ubicacion;
 import Persistencia.CrudUbicacion;
 import Servicio.EspectaculoServicio;
+import Servicio.EstadioServicio;
 
 public class GestionarEstadiosView {
 	private JFrame frame;
-	private JButton buttonAgregarEspectaculo = new JButton("Agregar Espectaculo");
-	private JButton buttonModificarEspectaculo= new JButton("Modificar Espectaculo");
-	private JButton buttonBorrarEspectaculo = new JButton("Borrar Espectaculo");
+	private JButton buttonAgregarEstadio = new JButton("Agregar Estadio");
+	private JButton buttonModificarEstadio= new JButton("Modificar Estadio");
+	private JButton buttonBorrarEstadio = new JButton("Borrar Estadio");
 	private JButton buttonSalir = new JButton("Salir");
 	
-	private JLabel mailLabel = new JLabel("Mail");
-	private JLabel contraseniaLabel = new JLabel("Contrasenia");
-	private JTextField mailField = new JTextField();
-	private JTextField contraseniaField = new JTextField();
-	private List<Espectaculo> listaEspectaculo=new ArrayList<>();
+	
+	private List<Estadio> listaEstadio=new ArrayList<>();
 	private  List<Ubicacion> listaUbicacion=new ArrayList<>();
-	private EspectaculoServicio espectaculoServicio = new EspectaculoServicio();
+	private EstadioServicio estadioServicio = new EstadioServicio();
 	private CrudUbicacion crudUbicacion = new CrudUbicacion();
 	public GestionarEstadiosView() {
 		crearVentana();
-		agregarEspectaculoBoton();
+		agregarEstadioBoton();
 		salirBoton();
 	}
 	
 	private void crearVentana() {
-		listaEspectaculo=espectaculoServicio.obtenerTodos();
+		listaEstadio=estadioServicio.obtenerTodos();
 		frame = new JFrame("Gestionar Espectaculo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -51,18 +50,18 @@ public class GestionarEstadiosView {
         frame.setLayout(new BorderLayout());
        
         // PANEL CENTRAL CON 2 COLUMNAS
-        JPanel panelEspectaculos = new JPanel();
-        panelEspectaculos.setLayout(new GridLayout(0, 2, 10, 10));
-        for (Espectaculo espectaculo : listaEspectaculo) {
-            panelEspectaculos.add(crearTarjetaEspectaculo(espectaculo));
+        JPanel panelEstadios = new JPanel();
+        panelEstadios.setLayout(new GridLayout(0, 2, 10, 10));
+        for (Estadio estadio : listaEstadio) {
+            panelEstadios.add(crearTarjetaEstadio(estadio));
         }
 
-        JScrollPane scrollPane = new JScrollPane(panelEspectaculos);
+        JScrollPane scrollPane = new JScrollPane(panelEstadios);
 
 		
         // PANEL INFERIOR
         JPanel panelInferior = new JPanel();
-        panelInferior.add(buttonAgregarEspectaculo);
+        panelInferior.add(buttonAgregarEstadio);
         panelInferior.add(buttonSalir);
 
         frame.add(scrollPane, BorderLayout.CENTER);
@@ -79,54 +78,97 @@ public class GestionarEstadiosView {
 		frame.setVisible(true);*/
         
 	}
-	 private JPanel crearTarjetaEspectaculo(Espectaculo espectaculo) {
+	 private JPanel crearTarjetaEstadio(Estadio estadio) {
 
-	        JPanel tarjeta = new JPanel(new BorderLayout());
+		 JPanel tarjeta = new JPanel(new BorderLayout());
 
-	        tarjeta.setBorder(
-	                BorderFactory.createTitledBorder(espectaculo.getNombre()));
+		    tarjeta.setBorder(
+		            BorderFactory.createTitledBorder(
+		                    estadio.getNombre()
+		            )
+		    );
 
-	        JPanel info = new JPanel(new GridLayout(3, 1));
+		    JPanel info = new JPanel();
 
-	        info.add(new JLabel("Descripcion: " + espectaculo.getDescripcion()));
-	        info.add(new JLabel("Fecha: " + espectaculo.getFecha()));
-	        info.add(new JLabel("Estadio: " + espectaculo.getEstadio().getNombre()));
+		    info.setLayout(new GridLayout(0, 1));
 
-	        tarjeta.add(info, BorderLayout.CENTER);
+		    info.add(new JLabel("Ubicaciones:"));
 
-	        JButton btnModificar = new JButton("Modificar");
-	        JButton btnBorrar = new JButton("Borrar");
+		    /*List<Ubicacion> ubicaciones =
+		            crudUbicacion.obtenerPorEstadio(
+		                    estadio.getId()
+		            );*/
 
-	        btnModificar.addActionListener(e -> {
-	            try {
-	                new ModificarEspectaculoView(espectaculo);
-	            } catch (Exception ex) {
-	                mostrarError(ex.getMessage());
-	            }
-	        });
+		    if(estadio.getListaUbicacion().isEmpty()) {
 
-	        btnBorrar.addActionListener(e -> {
-	            try {
-	            	espectaculoServicio.borrar(espectaculo);
-	            } catch (Exception ex) {
-	                mostrarError(ex.getMessage());
-	            }
-	        });
+		        info.add(
+		            new JLabel(
+		                "No tiene ubicaciones cargadas"
+		            )
+		        );
 
-	        JPanel panelBotones = new JPanel();
-	        panelBotones.add(btnModificar);
-	        panelBotones.add(btnBorrar);
+		    } else {
 
-	        tarjeta.add(panelBotones, BorderLayout.SOUTH);
+		        for(Ubicacion u : estadio.getListaUbicacion()) {
 
-	        return tarjeta;
-	    }
+		            info.add(
+		                new JLabel(
+		                    u.getLugar()
+		                    + " - $"
+		                    + u.getPrecio()
+		                    + " - "
+		                    + u.getCantEspacio()
+		                    + " lugares"
+		                )
+		            );
+		        }
+		    }
+
+		    tarjeta.add(info, BorderLayout.CENTER);
+
+		    JButton btnModificar =
+		            new JButton("Modificar");
+
+		    JButton btnBorrar =
+		            new JButton("Borrar");
+
+		    btnModificar.addActionListener(e -> {
+		        try {
+
+		            new ModificarEstadioView(estadio);
+
+		        } catch (Exception ex) {
+
+		            mostrarError(ex.getMessage());
+		        }
+		    });
+
+		    btnBorrar.addActionListener(e -> {
+		        try {
+
+		            estadioServicio.borrar(estadio);
+
+		        } catch (Exception ex) {
+
+		            mostrarError(ex.getMessage());
+		        }
+		    });
+
+		    JPanel panelBotones = new JPanel();
+
+		    panelBotones.add(btnModificar);
+		    panelBotones.add(btnBorrar);
+
+		    tarjeta.add(panelBotones, BorderLayout.SOUTH);
+
+		    return tarjeta;
+		}
 	
-	private void agregarEspectaculoBoton() {
+	private void agregarEstadioBoton() {
 	
-		buttonAgregarEspectaculo.addActionListener( e -> {
+		buttonAgregarEstadio.addActionListener( e -> {
 			try {
-				new CrearEspectaculoView();
+				new CrearEstadioView();
 				
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
@@ -137,7 +179,7 @@ public class GestionarEstadiosView {
 	}
 	private void salirBoton() {
 		
-		buttonAgregarEspectaculo.addActionListener( e -> {
+		buttonSalir.addActionListener( e -> {
 			try {
 				new UsuarioAdminView();
 				

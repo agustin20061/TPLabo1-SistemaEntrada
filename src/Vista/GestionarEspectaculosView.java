@@ -99,7 +99,7 @@ public class GestionarEspectaculosView {
 
 	        btnModificar.addActionListener(e -> {
 	            try {
-	                new ModificarEspectaculoView(espectaculo);
+	                new EditarEspectaculoView(espectaculo);
 	            } catch (Exception ex) {
 	                mostrarError(ex.getMessage());
 	            }

@@ -2,8 +2,9 @@ package Servicio;
 
 import java.util.List;
 
-import Entidades.Espectaculo;
 import Entidades.Estadio;
+import Entidades.Persona;
+import Entidades.Promocion;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
 import Exceptiones.GrabandoException;
@@ -12,21 +13,22 @@ import Exceptiones.LeyendoException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
-import Persistencia.CrudEspectaculo;
-import Persistencia.CrudEstadio;
-import Persistencia.CrudUbicacion;
+import Persistencia.CrudPersona;
+import Persistencia.CrudPromocion;
 import Persistencia.ICrud;
 
-public class EspectaculoServicio implements IABMO<Espectaculo>{
-	private ICrud<Espectaculo> EspectaculoCrud = new CrudEspectaculo();
-	private CrudEspectaculo crudEspectaculo= new CrudEspectaculo();
+public class PromocionServicio implements IABMO<Promocion>{
+	
+	private ICrud<Promocion> promocionCrud = new CrudPromocion();
+	private CrudPromocion crudPromocion = new CrudPromocion();
+	
 	
 	
 	
 	@Override
-	public Espectaculo leer(int id) throws LeyendoException {
+	public Promocion leer(int id) throws LeyendoException {
 		try {
-			return EspectaculoCrud.leer(id);
+			return promocionCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
 			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
@@ -34,19 +36,19 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 	}
 	
 	@Override
-	public Espectaculo modificar(Espectaculo p) throws ModificarException {
+	public Promocion modificar(Promocion p) throws ModificarException {
 		try {
 			
-			return EspectaculoCrud.modificar(p);
+			return promocionCrud.modificar(p);
 		} catch (ModificarException e) {
 			e.printStackTrace();
 			throw new ModificarPersonaException("Persona No Modificada ");
 		}
 	}
 	@Override
-	public void borrar(Espectaculo p) throws BorrandoException {
+	public void borrar(Promocion p) throws BorrandoException {
 		try {
-			EspectaculoCrud.borrar(p);
+			 promocionCrud.borrar(p);
 		} catch (BorrandoException e) {
 			e.printStackTrace();
 			throw new BorrandoPersonaException("Persona No Borrada");
@@ -54,28 +56,30 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 		
 	}
 	@Override
-	public void grabar(Espectaculo p) throws GrabandoException {
+	public void grabar(Promocion p) throws Exception {
 		try {
-			EspectaculoCrud.grabar(p);
+			if(p.getNombre().isBlank())
+			    throw new Exception("Ingrese un nombre");
+
+			if(p.getDescuento() <= 0 || p.getDescuento()> 100)
+			    throw new Exception("Descuento inválido");
+
+			if(!p.getTiempoFinal().isAfter(p.getTiempoInicio()))
+			    throw new Exception("La hora final debe ser posterior a la inicial");
+			 promocionCrud.grabar(p);
 		} catch (GrabandoException e) {
 			e.printStackTrace();
 			throw new GrabandoPersonaException("Persona No Creada");
 		}
 		
 	}
-	
-	public List<Espectaculo> obtenerTodos() {
-		
-		try {	
-			
-			return crudEspectaculo.obtenerTodos();
+	public List<Promocion> obtenerTodos() {
+		try {
+			return crudPromocion.obtenerTodos();
 		} catch (LeyendoException e) {
 			e.printStackTrace();
 			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
 		}
 	}
-
-
-
 
 }

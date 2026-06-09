@@ -2,6 +2,7 @@ package Entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Estadio {
 	private int id;
@@ -77,5 +78,13 @@ public class Estadio {
 	public String toString() {
 	    return nombre;
 	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(foto, id, listaUbicacion, nombre);
+	}
+
+	
 	
 }
