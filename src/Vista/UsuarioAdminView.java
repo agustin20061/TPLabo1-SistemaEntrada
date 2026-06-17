@@ -25,6 +25,9 @@ public class UsuarioAdminView {
 	private JButton buttonGestionarEspectaculo= new JButton("Gestionar Espectaculos");
 	private JLabel fechaDesdeLabel = new JLabel("Desde");
 	private JLabel fechaHastaLabel = new JLabel("Hasta");
+	private JButton buttonGestionarPromocion =new JButton("Gestionar Promociones");
+
+	private JButton buttonGestionarAbono =new JButton("Gestionar Abonos");
 
 	private JSpinner fechaDesdeSpinner = new JSpinner(new SpinnerDateModel());
 
@@ -37,6 +40,8 @@ public class UsuarioAdminView {
 		setearBotonGestionarEspectaculo();
 		setearBotonGestionarEstadio();
 		setearBotonCerrarSesion();
+		setearBotonGestionarPromocion();
+		setearBotonGestionarAbono();
 	}
 	
 
@@ -64,6 +69,8 @@ public class UsuarioAdminView {
 
 		panelBotones.add(buttonGestionarEspectaculo);
 		panelBotones.add(buttonGestionarEstadio);
+		panelBotones.add(buttonGestionarPromocion);
+		panelBotones.add(buttonGestionarAbono);
 
 		panelBotones.add(fechaDesdeLabel);
 		panelBotones.add(fechaDesdeSpinner);
@@ -172,5 +179,48 @@ public class UsuarioAdminView {
 	    });
 	}
 
+	private void setearBotonGestionarPromocion() {
 
+	    buttonGestionarPromocion.addActionListener(e -> {
+
+	        try {
+
+	            frame.dispose();
+	            new GestionarPromocionView();
+
+	        } catch (Exception e1) {
+
+	            JDialog dialog =
+	                    new JDialog(frame, "Error", true);
+
+	            dialog.add(
+	                    new JLabel(e1.getMessage()));
+
+	            dialog.pack();
+	            dialog.setVisible(true);
+	        }
+	    });
+	}
+	private void setearBotonGestionarAbono() {
+
+	    buttonGestionarAbono.addActionListener(e -> {
+
+	        try {
+
+	            frame.dispose();
+	            new GestionarAbonosView();
+
+	        } catch (Exception e1) {
+
+	            JDialog dialog =
+	                    new JDialog(frame, "Error", true);
+
+	            dialog.add(
+	                    new JLabel(e1.getMessage()));
+
+	            dialog.pack();
+	            dialog.setVisible(true);
+	        }
+	    });
+	}
 }

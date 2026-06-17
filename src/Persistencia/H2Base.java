@@ -1,9 +1,12 @@
 package Persistencia;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 import Entidades.Abono;
@@ -128,6 +131,11 @@ public abstract class H2Base {
 			else if (param instanceof String _param) s.setString(i++, _param); //Vean este caso!!
 			else if (param instanceof Double _param) s.setDouble(i++, _param);
 			else if (param instanceof Long) s.setLong(i++, (Long) param);
+			else if (param instanceof Date _param) s.setDate(i++, _param);
+			else if (param instanceof Float _param) s.setFloat(i++, _param);
+			else if (param instanceof Boolean _param) s.setBoolean(i++, _param);
+			else if (param instanceof Timestamp _param) s.setTimestamp(i++, _param);
+			else if (param instanceof Time _param) s.setTime(i++, _param);
 			else throw new IllegalArgumentException("Unexpected value: " + param);
 		}
 		return s;

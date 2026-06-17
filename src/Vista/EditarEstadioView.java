@@ -90,7 +90,7 @@ public class EditarEstadioView {
 
 	                    new EditarUbicacionView(u,estadio);
 
-	                    cargarUbicaciones();
+	                    
 	                });
 
 	                borrarButton.addActionListener(e -> {

@@ -8,12 +8,12 @@ public class Estadio {
 	private int id;
 	private String nombre;
 	private ArrayList<Ubicacion> listaUbicacion;
-	private String foto;
+	//private String foto;
 	
-	public Estadio(String nombre, ArrayList<Ubicacion> listaUbicacion, String foto) {
+	public Estadio(String nombre, ArrayList<Ubicacion> listaUbicacion) {//, String foto
 		this.nombre = nombre;
 		this.listaUbicacion = listaUbicacion;
-		this.foto = foto;
+		//this.foto = foto;
 	}
 	
 	
@@ -56,14 +56,14 @@ public class Estadio {
 	}
 
 
-	public String getFoto() {
+	/*public String getFoto() {
 		return foto;
 	}
 
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
-
+*/
 
 	public int getId() {
 		return id;

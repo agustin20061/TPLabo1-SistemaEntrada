@@ -30,7 +30,7 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 	
 	@Override
 	public Promocion leer(int id) throws LeyendoException {
-		String sql = "SELECT NOMBRE,FECHAINICIO,FECHAFIN,DESCUENTO FROM PROMOCION WHERE ID=?";
+		String sql = "SELECT NOMBRE,TIEMPO_INICIO,TIEMPO_FINAL,DESCUENTO FROM PROMOCION WHERE ID=?";
 		ResultSet rs=null;
 		Promocion p;
 		try {
@@ -39,8 +39,8 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 				
 					p = new Promocion(
 						    rs.getString("NOMBRE"),
-						    rs.getTime("FECHAINICIO"),
-						    rs.getTime("FECHAFIN"),
+						    rs.getTime("TIEMPO_INICIO"),
+						    rs.getTime("TIEMPO_FINAL"),
 						    rs.getFloat("DESCUENTO")
 						    
 						);
@@ -67,7 +67,7 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 
 	@Override
 	public Promocion modificar(Promocion p) throws ModificarException {
-	    String sql = "UPDATE PROMOCION SET NOMBRE=?, FECHAINICIO=?, FECHAFIN=?, DESCUENTO=? WHERE ID=?";
+	    String sql = "UPDATE PROMOCION SET NOMBRE=?, TIEMPO_INICIO=?, TIEMPO_FINAL=?, DESCUENTO=? WHERE ID=?";
 
 	    try {
 	        updateDeleteInsertSql(
@@ -117,7 +117,7 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 	public void grabar(Promocion p) throws GrabandoException {
 
 		String sql = "INSERT INTO PROMOCION " +
-				     "(NOMBRE,FECHAINICIO,FECHAFIN,DESCUENTO) " +
+				     "(NOMBRE,TIEMPO_INICIO,TIEMPO_FINAL,DESCUENTO) " +
 				     "VALUES (?,?,?,?)";
 
 		try {
@@ -147,7 +147,7 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 
 	@Override
 	public List<Promocion> leerTodos() throws LeyendoTodosException{
-		String sql = "SELECT ID, NOMBRE, FECHAINICIO, FECHAFIN, DESCUENTO FROM PROMOCION";
+		String sql = "SELECT ID, NOMBRE, TIEMPO_INICIO, TIEMPO_FINAL, DESCUENTO FROM PROMOCION";
 		ResultSet rs=null;
 		
 		try {
@@ -158,7 +158,7 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 			Promocion e;
 			while (rs.next()) {
 					
-					e=new Promocion( rs.getString("NOMBRE"),rs.getTime("FECHAINICIO"),rs.getTime("FECHAFIN"),rs.getFloat("DESCUENTO"));
+					e=new Promocion( rs.getString("NOMBRE"),rs.getTime("TIEMPO_INICIO"),rs.getTime("TIEMPO_FINAL"),rs.getFloat("DESCUENTO"));
 					e.setId(rs.getInt("ID"));
 					p.add(e);
 			}

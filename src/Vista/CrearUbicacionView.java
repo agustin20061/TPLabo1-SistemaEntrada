@@ -88,7 +88,6 @@ public class CrearUbicacionView {
 	private void salir() {
 		button.addActionListener( e -> {
 			try {
-				new UsuarioAdminView();
 				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);

@@ -16,7 +16,9 @@ import javax.swing.SpinnerDateModel;
 
 import Entidades.Promocion;
 import Servicio.PromocionServicio;
-
+import java.util.Date;
+import java.time.LocalTime;
+import java.time.ZoneId;
 public class EditarPromocionView {
 	private JFrame frame;
 	private JButton button = new JButton("Editar Promocion");
@@ -79,13 +81,21 @@ public class EditarPromocionView {
 	            String nombre = nombreField.getText();
 	            float descuento = Float.parseFloat(descuentoField.getText());
 
-	            java.sql.Time horaSqlInicio =
-	                    (java.sql.Time) horaInicioSpinner.getValue();
-	            LocalTime horaInicio = horaSqlInicio.toLocalTime();
+	            Date horaInicioDate =
+	                    (Date) horaInicioSpinner.getValue();
 
-	            java.sql.Time horaSqlFin =
-	                    (java.sql.Time) horaFinSpinner.getValue();
-	            LocalTime horaFin = horaSqlFin.toLocalTime();
+	            LocalTime horaInicio =
+	                    horaInicioDate.toInstant()
+	                                  .atZone(java.time.ZoneId.systemDefault())
+	                                  .toLocalTime();
+
+	            Date horaFinDate =
+	                    (Date) horaFinSpinner.getValue();
+
+	            LocalTime horaFin =
+	                    horaFinDate.toInstant()
+	                               .atZone(java.time.ZoneId.systemDefault())
+	                               .toLocalTime();
 
 	            promocion.setNombre(nombre);
 	            promocion.setTiempoInicio(horaInicio);

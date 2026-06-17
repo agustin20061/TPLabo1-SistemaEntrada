@@ -33,7 +33,7 @@ public class EditarPersonaView {
 	public EditarPersonaView(Persona p) {
 		this.persona=p;
 		crearVentana();
-		setearBoton(persona.getDni());
+		setearBoton(persona.getId());
 	}
 	
 	private void crearVentana() {

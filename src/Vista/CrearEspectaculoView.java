@@ -102,13 +102,21 @@ public class CrearEspectaculoView {
 				                         .atZone(ZoneId.systemDefault())
 				                         .toLocalDate();
 				Espectaculo p=new Espectaculo(nombre,estadioSeleccionado,descripcion,fecha);
+				System.out.println(nombre);
+				System.out.println(descripcion);
+				System.out.println(estadioSeleccionado);
+				System.out.println(estadioSeleccionado.getId());
+				System.out.println(fecha);
 				espectaculoServicio.grabar(p);
 				frame.dispose();
 				new UsuarioAdminView();
 			} catch (Exception e1) {
-				JDialog dialog = new JDialog(frame,"Error",true);
-				dialog.add(new JLabel(e1.getMessage()));
-				dialog.setVisible(true);
+				 e1.printStackTrace();
+
+				    JDialog dialog = new JDialog(frame,"Error",true);
+				    dialog.add(new JLabel(String.valueOf(e1)));
+				    dialog.pack();
+				    dialog.setVisible(true);
 			}
 		});
 	}

@@ -37,11 +37,12 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 						    rs.getString("NOMBRE")
 						    
 						);
+					
 					p.setId(id);
 					return p;
 				
 			}
-				throw new LeyendoPersonaException("Registro no encontrado");
+				throw new LeyendoEstadioException("Registro no encontrado");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -76,6 +77,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 			if (rs!=null)
 				try {
 					rs.close();
+					cerrarConexion();
 				} catch (SQLException e) {
 					throw new ModificarException(e.getMessage());
 				}

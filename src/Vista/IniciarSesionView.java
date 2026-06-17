@@ -20,7 +20,6 @@ import Servicio.PersonaServicio;
 public class IniciarSesionView {
 	private JFrame frame;
 	private JButton button = new JButton("Iniciar Sesion");
-	private JButton buttonCrear = new JButton("Crear cuenta");
 	private JLabel mailLabel = new JLabel("Mail");
 	private JLabel contraseñaLabel = new JLabel("Contraseña");
 	private JTextField mailField = new JTextField();
@@ -30,7 +29,7 @@ public class IniciarSesionView {
 	public IniciarSesionView() {
 		crearVentana();
 		setearBoton();
-		crearBoton();
+		
 	}
 	
 	private void crearVentana() {
@@ -46,7 +45,6 @@ public class IniciarSesionView {
 		
 		frame.getContentPane().add(panel);
 		frame.getContentPane().add(button);
-		frame.getContentPane().add(buttonCrear);
 		
 		frame.pack();
 		frame.setVisible(true);
@@ -68,16 +66,5 @@ public class IniciarSesionView {
 			}
 		});
 	}
-	private void crearBoton() {
-		buttonCrear.addActionListener( e -> {
-			try {
-				frame.dispose();
-				new CrearCuentaView();
-			} catch (Exception e1) {
-				JDialog dialog = new JDialog(frame,"Error",true);
-				dialog.add(new JLabel(e1.getMessage()));
-				dialog.setVisible(true);
-			}
-		});
-	}
+	
 }

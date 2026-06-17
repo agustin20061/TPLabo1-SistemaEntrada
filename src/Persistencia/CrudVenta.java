@@ -3,6 +3,7 @@ package Persistencia;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CrudVenta extends H2Base implements ICrud<Venta>{
 						    estadio,
 						    ubi,
 						    rs.getInt("CANTIDAD"),
-						    rs.getTimestamp("FECHACOMPRA").toLocalDateTime(),
+						    rs.getTimestamp("FECHA_COMPRA").toLocalDateTime(),
 						    rs.getInt("PRECIO")
 						);
 					p.setId(id);
@@ -84,17 +85,16 @@ public class CrudVenta extends H2Base implements ICrud<Venta>{
 	@Override
 	public void grabar(Venta p) throws GrabandoException {
 		String sql = "INSERT INTO VENTA"
-				+ "(ID_ESPECTACULO,ID_ESTADIO,ID_UBICACION,CANTIDAD,FECHACOMPRA,PRECIO)"
-				+ "VALUES (?,?,?,?,?,?)";
+				+ "(ID_ESPECTACULO,ID_UBICACION,CANTIDAD,FECHA_COMPRA,TOTAL)"
+				+ "VALUES (?,?,?,?,?)";
 		
 		try {
 			int rows = updateDeleteInsertSql(
 					sql,
 					p.getEspectaculo().getId(),
-					p.getEstadio().getId(),
 					p.getUbicacion().getId(),
 					p.getCantidad(),
-					p.getFechaCompra(),
+					Timestamp.valueOf(p.getFechaCompra()),
 					p.getTotal()
 					
 			);
@@ -121,7 +121,7 @@ public class CrudVenta extends H2Base implements ICrud<Venta>{
 	}
 	
 	public List<Venta> leerFechaEspectaculo(Date fechaInicial, Date fechaHasta) throws LeyendoTodosException{
-		String sql = "SELECT ID_ESPECTACULO,SUM(CANTIDAD) AS TOTAL_ENTRADAS,SUM(PRECIO) AS TOTAL_VENDIDO FROM VENTA WHERE FECHACOMPRA BETWEEN ? AND ? GROUP BY ID_ESPECTACULO";
+		String sql = "SELECT ID_ESPECTACULO,SUM(CANTIDAD) AS TOTAL_ENTRADAS,SUM(TOTAL) AS TOTAL_VENDIDO FROM VENTA WHERE FECHA_COMPRA BETWEEN ? AND ? GROUP BY ID_ESPECTACULO";
 		ResultSet rs=null;
 		Venta p;
 		List<Venta> lista=new ArrayList<>();

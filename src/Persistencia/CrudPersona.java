@@ -26,9 +26,9 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 	}
 	
 	public Persona iniciarSesion(String mail,String contrasenia) throws LeyendoException {
-		String sql = "SELECT DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL,ID FROM PERSONAS WHERE MAIL=? AND CONTRASENIA=?";
+		String sql = "SELECT DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL,ID FROM PERSONA WHERE MAIL=? AND CONTRASENIA=?";
 		ResultSet rs=null;
-		Persona p;
+		Persona p=null;
 		try {
 			rs = selectSql(sql, mail,contrasenia);
 			if (rs.next()) {
@@ -43,6 +43,7 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 				p.setId(rs.getInt("ID"));
 				return p;
 			}
+			
 				throw new LeyendoPersonaException("Registro no encontrado");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -55,12 +56,13 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 					throw new LeyendoException(e.getMessage());
 				}
 		}
-		return null;
+		return p;
+		
 		
 	}
 	@Override
 	public Persona leer(int id) throws LeyendoException {
-		String sql = "SELECT  DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL FROM PERSONAS WHERE ID=?";
+		String sql = "SELECT  DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL,ID FROM PERSONA WHERE ID=?";
 		ResultSet rs=null;
 		Persona p;
 		try {
@@ -95,7 +97,7 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 
 	@Override
 	public Persona modificar(Persona p) throws ModificarException {
-		String sql = "UPDATE PERSONAS SET NOMBRE=?,APELLIDO=?,DNI=?,MAIL=?,CONTRASENIA=? WHERE ID=?";
+		String sql = "UPDATE PERSONA SET NOMBRE=?,APELLIDO=?,DNI=?,MAIL=?,CONTRASENIA=? WHERE ID=?";
 		ResultSet rs=null;
 		try {
 			int rows = updateDeleteInsertSql(
@@ -123,9 +125,9 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 
 	@Override
 	public void borrar(Persona p) throws BorrandoException {
-		String sql = "DELETE FROM PERSONAS WHERE DNI=?";
+		String sql = "DELETE FROM PERSONA WHERE ID=?";
 		try {
-			int rows = updateDeleteInsertSql(sql, p.getDni());
+			int rows = updateDeleteInsertSql(sql, p.getId());
 			System.out.println("Registros eliminados: "+rows);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -137,7 +139,7 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 	@Override
 	public void grabar(Persona p) throws GrabandoException {
 
-		String sql = "INSERT INTO PERSONAS " +
+		String sql = "INSERT INTO PERSONA " +
 				     "(DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL) " +
 				     "VALUES (?,?,?,?,?,?)";
 
@@ -164,7 +166,7 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 
 	@Override
 	public List<Persona> leerTodos() throws LeyendoTodosException {
-		String sql = "SELECT  ID,DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA FROM PERSONAS WHERE ROL=?";
+		String sql = "SELECT  ID,DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA FROM PERSONA WHERE ROL=?";
 		ResultSet rs=null;
 		Persona p;
 		List<Persona> pe  = new ArrayList<>();

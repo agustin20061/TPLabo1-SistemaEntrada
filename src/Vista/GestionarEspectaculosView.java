@@ -135,7 +135,7 @@ public class GestionarEspectaculosView {
 		buttonAgregarEspectaculo.addActionListener( e -> {
 			try {
 				new CrearEspectaculoView();
-				
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));
@@ -148,7 +148,7 @@ public class GestionarEspectaculosView {
 		buttonSalir.addActionListener( e -> {
 			try {
 				new UsuarioAdminView();
-				
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));

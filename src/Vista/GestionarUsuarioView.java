@@ -28,17 +28,18 @@ public class GestionarUsuarioView {
 	private PersonaServicio personaServicio = new PersonaServicio();
 	
 	public GestionarUsuarioView() {
+		
+		crearVentana();
+		agregarUsuarioBoton();
+		salirBoton();
+	}
+	private void crearVentana() {
 		try {
 			this.listaUsuarioComun=personaServicio.leerTodos();
 		} catch (LeyendoTodosException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		crearVentana();
-		agregarUsuarioBoton();
-		salirBoton();
-	}
-	private void crearVentana() {
 	frame = new JFrame("Gestionar Usuarios");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel panel = new JPanel();
@@ -82,10 +83,10 @@ public class GestionarUsuarioView {
         info.add(new JLabel("Mail: " + usuario.getMail()));
         info.add(new JLabel("Contrasenia: " + usuario.getContrasenia()));
         if(usuario.getAbono()==null) {
-        	info.add(new JLabel("Abono: "+ "-"));
+            info.add(new JLabel("Abono: -"));
+        } else {
+            info.add(new JLabel("Abono: " + usuario.getAbono().getNombre()));
         }
-        info.add(new JLabel("Abono: "+ usuario.getAbono().getNombre()));
-        
         tarjeta.add(info, BorderLayout.CENTER);
 
         JButton btnModificar = new JButton("Modificar");
@@ -93,6 +94,7 @@ public class GestionarUsuarioView {
 
         btnModificar.addActionListener(e -> {
             try {
+            	 frame.dispose();
                 new EditarPersonaView(usuario);
             } catch (Exception ex) {
                 ex.getMessage();
