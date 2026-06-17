@@ -19,7 +19,7 @@ import Servicio.PromocionServicio;
 
 public class EditarPromocionView {
 	private JFrame frame;
-	private JButton button = new JButton("Crear Promocion");
+	private JButton button = new JButton("Editar Promocion");
 	private JLabel tiempoInicioLabel = new JLabel("Tiempo Inicio");
 	private JLabel tiempoFinalLabel = new JLabel("Tiempo Final");
 	private JSpinner horaInicioSpinner = new JSpinner(new SpinnerDateModel());
@@ -47,7 +47,8 @@ public class EditarPromocionView {
 		nombreField.setText(promocion.getNombre());
 		panel.add(nombreField);
 		panel.add(tiempoInicioLabel);
-		horaInicioSpinner.setValue(promocion.getTiempoInicio());
+		horaInicioSpinner.setValue(java.sql.Time.valueOf(promocion.getTiempoInicio()));
+
 		JSpinner.DateEditor editor = new JSpinner.DateEditor(horaInicioSpinner, "HH:mm");
 		horaInicioSpinner.setEditor(editor);
 		
@@ -56,7 +57,7 @@ public class EditarPromocionView {
 
 		panel.add(tiempoFinalLabel);
 		
-		horaFinSpinner.setValue(promocion.getTiempoFinal());
+		horaFinSpinner.setValue( java.sql.Time.valueOf(promocion.getTiempoFinal()));
 		JSpinner.DateEditor editorFinal = new JSpinner.DateEditor(horaFinSpinner, "HH:mm");
 		horaFinSpinner.setEditor(editorFinal);
 		panel.add(horaFinSpinner);
@@ -78,15 +79,13 @@ public class EditarPromocionView {
 	            String nombre = nombreField.getText();
 	            float descuento = Float.parseFloat(descuentoField.getText());
 
-	            Date fechaInicio = (Date) horaInicioSpinner.getValue();
-	            LocalTime horaInicio = fechaInicio.toInstant()
-	                    .atZone(java.time.ZoneId.systemDefault())
-	                    .toLocalTime();
+	            java.sql.Time horaSqlInicio =
+	                    (java.sql.Time) horaInicioSpinner.getValue();
+	            LocalTime horaInicio = horaSqlInicio.toLocalTime();
 
-	            Date fechaFin = (Date) horaFinSpinner.getValue();
-	            LocalTime horaFin = fechaFin.toInstant()
-	                    .atZone(java.time.ZoneId.systemDefault())
-	                    .toLocalTime();
+	            java.sql.Time horaSqlFin =
+	                    (java.sql.Time) horaFinSpinner.getValue();
+	            LocalTime horaFin = horaSqlFin.toLocalTime();
 
 	            promocion.setNombre(nombre);
 	            promocion.setTiempoInicio(horaInicio);
@@ -98,16 +97,8 @@ public class EditarPromocionView {
 	            frame.dispose();
 	            new GestionarPromocionView();
 
-	            System.out.println("Se modificó exitosamente");
-
 	        } catch (Exception e1) {
-
-	            JDialog dialog = new JDialog(frame, "Error", true);
-	            dialog.add(new JLabel(e1.getMessage()));
-	            dialog.pack();
-	            dialog.setLocationRelativeTo(frame);
-	            dialog.setVisible(true);
-
+	            e1.printStackTrace();
 	        }
 	    });
 	}

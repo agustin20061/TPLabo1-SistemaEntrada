@@ -9,8 +9,12 @@ import Entidades.Estadio;
 import Entidades.Ubicacion;
 import Exceptiones.BorrandoException;
 import Exceptiones.GrabandoException;
+import Exceptiones.LeyendoEstadioException;
 import Exceptiones.LeyendoException;
 import Exceptiones.LeyendoPersonaException;
+import Exceptiones.LeyendoTodosEstadioException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoUbicacionException;
 import Exceptiones.ModificarException;
 
 public class CrudEstadio extends H2Base implements ICrud<Estadio>{
@@ -33,6 +37,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 						    rs.getString("NOMBRE")
 						    
 						);
+					p.setId(id);
 					return p;
 				
 			}
@@ -80,7 +85,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 
 	@Override
 	public void borrar(Estadio p) throws BorrandoException {
-		String sql = "DELETE FROM UBICACION WHERE ID=?";
+		String sql = "DELETE FROM ESTADIO WHERE ID=?";
 		try {
 			int rows = updateDeleteInsertSql(sql, p.getId());
 			System.out.println("Registros eliminados: "+rows);
@@ -124,7 +129,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 					return p;
 				
 			}
-				throw new LeyendoPersonaException("Registro no encontrado");
+				throw new LeyendoEstadioException("id no encontrado");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -138,8 +143,8 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 		}
 		return -1;
 	}
-
-	public List<Estadio> obtenerTodos() throws LeyendoException{
+	@Override
+	public List<Estadio> leerTodos() throws LeyendoTodosException{
 		String sql = "SELECT ID, NOMBRE FROM ESTADIO";
 		ResultSet rs=null;
 		
@@ -151,23 +156,29 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 			rs = selectSql(sql);
 			Estadio e;
 			while (rs.next()) {
-					listaUbicacion=crudUbicacion.obtenerPorEstadio(rs.getInt("ID"));
+					try {
+						listaUbicacion=crudUbicacion.obtenerPorEstadio(rs.getInt("ID"));
+					} catch (LeyendoTodosException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					e=new Estadio( rs.getInt("ID"),rs.getString("NOMBRE"),listaUbicacion);
 					p.add(e);
 			}
 			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoTodosEstadioException("Error al leer todos los usuarios");
 		} finally {
 			if (rs!=null)
 				try {
 					rs.close();
 					cerrarConexion();
 				} catch (SQLException e) {
-					throw new LeyendoException(e.getMessage());
+					throw new LeyendoTodosException(e.getMessage());
 				}
 		}
-		return null;
+		
 	}
 
 	

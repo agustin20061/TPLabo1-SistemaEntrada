@@ -4,11 +4,17 @@ import java.util.List;
 
 import Entidades.Espectaculo;
 import Entidades.Estadio;
+import Exceptiones.BorrandoEspectaculoException;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
+import Exceptiones.EspectaculoNoEncontradaException;
+import Exceptiones.GrabandoEspectaculoException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosEspectaculoException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.ModificarEspectaculoException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
@@ -19,7 +25,6 @@ import Persistencia.ICrud;
 
 public class EspectaculoServicio implements IABMO<Espectaculo>{
 	private ICrud<Espectaculo> EspectaculoCrud = new CrudEspectaculo();
-	private CrudEspectaculo crudEspectaculo= new CrudEspectaculo();
 	
 	
 	
@@ -29,7 +34,7 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 			return EspectaculoCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new EspectaculoNoEncontradaException("Espectaculo No Encontrada - ID "+id);
 		}
 	}
 	
@@ -40,7 +45,7 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 			return EspectaculoCrud.modificar(p);
 		} catch (ModificarException e) {
 			e.printStackTrace();
-			throw new ModificarPersonaException("Persona No Modificada ");
+			throw new ModificarEspectaculoException("Espectaculo No Modificada ");
 		}
 	}
 	@Override
@@ -49,7 +54,7 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 			EspectaculoCrud.borrar(p);
 		} catch (BorrandoException e) {
 			e.printStackTrace();
-			throw new BorrandoPersonaException("Persona No Borrada");
+			throw new BorrandoEspectaculoException("Espectaculo No Borrada");
 		}
 		
 	}
@@ -59,19 +64,20 @@ public class EspectaculoServicio implements IABMO<Espectaculo>{
 			EspectaculoCrud.grabar(p);
 		} catch (GrabandoException e) {
 			e.printStackTrace();
-			throw new GrabandoPersonaException("Persona No Creada");
+			throw new GrabandoEspectaculoException("Espectaculo No Creada");
 		}
 		
 	}
 	
-	public List<Espectaculo> obtenerTodos() {
-		
-		try {	
+
+	@Override
+	public List<Espectaculo> leerTodos() throws LeyendoTodosException {
+try {	
 			
-			return crudEspectaculo.obtenerTodos();
-		} catch (LeyendoException e) {
+			return EspectaculoCrud.leerTodos();
+		} catch (LeyendoTodosException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new LeyendoTodosEspectaculoException("Espectaculos no leidos");
 		}
 	}
 

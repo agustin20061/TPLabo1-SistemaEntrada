@@ -7,12 +7,18 @@ import Entidades.Persona;
 import Entidades.Promocion;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
+import Exceptiones.BorrandoPromocionException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
+import Exceptiones.GrabandoPromocionException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoTodosPromocionException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
+import Exceptiones.ModificarPromocionException;
 import Exceptiones.PersonaNoEncontradaException;
+import Exceptiones.PromocionNoEncontradaException;
 import Persistencia.CrudPersona;
 import Persistencia.CrudPromocion;
 import Persistencia.ICrud;
@@ -20,7 +26,6 @@ import Persistencia.ICrud;
 public class PromocionServicio implements IABMO<Promocion>{
 	
 	private ICrud<Promocion> promocionCrud = new CrudPromocion();
-	private CrudPromocion crudPromocion = new CrudPromocion();
 	
 	
 	
@@ -31,7 +36,7 @@ public class PromocionServicio implements IABMO<Promocion>{
 			return promocionCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new PromocionNoEncontradaException("Promocion No Encontrada - ID "+id);
 		}
 	}
 	
@@ -42,7 +47,7 @@ public class PromocionServicio implements IABMO<Promocion>{
 			return promocionCrud.modificar(p);
 		} catch (ModificarException e) {
 			e.printStackTrace();
-			throw new ModificarPersonaException("Persona No Modificada ");
+			throw new ModificarPromocionException("Promocion No Modificada ");
 		}
 	}
 	@Override
@@ -51,12 +56,12 @@ public class PromocionServicio implements IABMO<Promocion>{
 			 promocionCrud.borrar(p);
 		} catch (BorrandoException e) {
 			e.printStackTrace();
-			throw new BorrandoPersonaException("Persona No Borrada");
+			throw new BorrandoPromocionException("Promocion No Borrada");
 		}
 		
 	}
 	@Override
-	public void grabar(Promocion p) throws Exception {
+	public void grabar(Promocion p) throws GrabandoException {
 		try {
 			if(p.getNombre().isBlank())
 			    throw new Exception("Ingrese un nombre");
@@ -69,16 +74,23 @@ public class PromocionServicio implements IABMO<Promocion>{
 			 promocionCrud.grabar(p);
 		} catch (GrabandoException e) {
 			e.printStackTrace();
-			throw new GrabandoPersonaException("Persona No Creada");
+			throw new GrabandoPromocionException("Promocion No Creada");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new GrabandoPromocionException("Promocion No Creada");
+			
 		}
 		
 	}
-	public List<Promocion> obtenerTodos() {
+
+	@Override
+	public List<Promocion> leerTodos() throws LeyendoTodosException {
 		try {
-			return crudPromocion.obtenerTodos();
-		} catch (LeyendoException e) {
+			return promocionCrud.leerTodos();
+		} catch (LeyendoTodosException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new LeyendoTodosPromocionException("Promociones No Encontradas");
 		}
 	}
 

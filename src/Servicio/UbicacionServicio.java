@@ -1,14 +1,18 @@
 package Servicio;
 
+import java.util.List;
+
 import Entidades.Ubicacion;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
+import Exceptiones.UbicacionNoEncontradaException;
 import Persistencia.CrudUbicacion;
 import Persistencia.ICrud;
 
@@ -24,7 +28,7 @@ public class UbicacionServicio implements IABMO<Ubicacion>{
 			return ubicacionCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new UbicacionNoEncontradaException("Ubicacion No Encontrada - ID "+id);
 		}
 	}
 	
@@ -57,5 +61,11 @@ public class UbicacionServicio implements IABMO<Ubicacion>{
 			throw new GrabandoPersonaException("Persona No Creada");
 		}
 		
+	}
+
+	@Override
+	public List<Ubicacion> leerTodos() throws LeyendoTodosException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

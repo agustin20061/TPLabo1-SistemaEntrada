@@ -19,6 +19,7 @@ import javax.swing.SpinnerDateModel;
 
 import Entidades.Espectaculo;
 import Entidades.Estadio;
+import Exceptiones.LeyendoTodosException;
 import Servicio.EspectaculoServicio;
 import Servicio.EstadioServicio;
 
@@ -47,7 +48,12 @@ public class CrearEspectaculoView {
 	}
 	
 	private void crearVentana() {
-		estadios = estadioServicio.obtenerTodos();
+		try {
+			estadios = estadioServicio.leerTodos();
+		} catch (LeyendoTodosException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(Estadio e : estadios) {
 		    estadioCombo.addItem(e);
 		}

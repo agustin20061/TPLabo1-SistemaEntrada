@@ -16,14 +16,7 @@ public class Espectaculo {
 		this.fecha =fecha;
 	}
 	
-	public Espectaculo(int id, String nombre, Estadio estadio, String descripcion, LocalDate fecha) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.estadio = estadio;
-		this.descripcion = descripcion;
-		this.fecha = fecha;
-	}
+	
 
 	public String getNombre() {
 		return nombre;
@@ -57,6 +50,9 @@ public class Espectaculo {
 	}
 	
 	
-	
+	@Override
+	public String toString() {
+	    return nombre;
+	}
 	
 }

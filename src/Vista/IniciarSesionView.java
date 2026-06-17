@@ -59,16 +59,7 @@ public class IniciarSesionView {
 				String contrasenia = new String(contraseniaField.getPassword());
 				Persona p= personaServicio.iniciarSesionPersona(mail,contrasenia);
 				frame.dispose();
-				if (p instanceof UsuarioAdmin) {
-					//new UsuarioAdminView(p);
-
-				} else if (p instanceof UsuarioComun) {
-					new UsuarioComunView(p);
-
-				} else if (p instanceof UsuarioVendedor) {
-					//new UsuarioAdminView(p);
-				}
-				
+				p.iniciarVentana();
 				
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);

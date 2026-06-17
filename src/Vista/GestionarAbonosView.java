@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 
 import Entidades.Abono;
 import Entidades.Promocion;
+import Exceptiones.LeyendoTodosException;
 import Servicio.AbonoServicio;
 import Servicio.PromocionServicio;
 
@@ -31,7 +32,12 @@ public class GestionarAbonosView {
 		salirBoton();
 	}
 	private void crearVentana() {
-	listaAbono=abonoServicio.obtenerTodos();
+	try {
+		listaAbono=abonoServicio.leerTodos();
+	} catch (LeyendoTodosException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	frame = new JFrame("Gestionar Abonos");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel panel = new JPanel();
@@ -84,7 +90,7 @@ public class GestionarAbonosView {
             	frame.dispose();
                 new EditarAbonoView(abono);
             } catch (Exception ex) {
-                mostrarError(ex.getMessage());
+                ex.getMessage();
             }
         });
 
@@ -94,7 +100,7 @@ public class GestionarAbonosView {
             	 frame.dispose();
                  new GestionarAbonosView();
             } catch (Exception ex) {
-                mostrarError(ex.getMessage());
+               ex.getMessage();
             }
         });
 

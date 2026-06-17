@@ -2,7 +2,7 @@ package Entidades;
 
 import java.util.ArrayList;
 
-import Vista.UsuarioComunView;
+import Exceptiones.LeyendoException;
 
 public class UsuarioComun extends Persona{
 	
@@ -27,6 +27,14 @@ public class UsuarioComun extends Persona{
 	public void setListaEspectaculo(ArrayList<Espectaculo> listaEspectaculo) {
 		this.listaEspectaculo = listaEspectaculo;
 	}
-	
+    @Override
+    public void iniciarVentana() throws LeyendoException {
+       
+    }
+
+   
+
+    @Override
+    public String getRolPersistencia() { return "COMUN"; }
 	
 }

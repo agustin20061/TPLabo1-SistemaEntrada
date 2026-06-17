@@ -12,10 +12,16 @@ import Entidades.UsuarioAdmin;
 import Entidades.UsuarioComun;
 import Entidades.UsuarioVendedor;
 import Exceptiones.BorrandoException;
+import Exceptiones.BorrandoUbicacionException;
 import Exceptiones.GrabandoException;
+import Exceptiones.GrabandoUbicacionException;
 import Exceptiones.LeyendoException;
 import Exceptiones.LeyendoPersonaException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoTodosUbicacionException;
+import Exceptiones.LeyendoUbicacionException;
 import Exceptiones.ModificarException;
+import Exceptiones.ModificarUbicacionException;
 
 public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	
@@ -26,7 +32,7 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	
 	@Override
 	public Ubicacion leer(int id) throws LeyendoException {
-		String sql = "SELECT  LUGAR,PRECIO,CANTESPACIO FROM UBICACION WHERE ID=?";
+		String sql = "SELECT  LUGAR,PRECIO,CANTESPACIO,ID_ESTADIO FROM UBICACION WHERE ID=?";
 		ResultSet rs=null;
 		Ubicacion p;
 		try {
@@ -39,12 +45,14 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 						    rs.getInt("CANTESPACIO"),
 						    rs.getInt("ID_ESTADIO")
 						);
+					p.setId(id);
 					return p;
 				
 			}
-				throw new LeyendoPersonaException("Registro no encontrado");
+				
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoUbicacionException("ubicacion no encontrada");
 		} finally {
 			if (rs!=null)
 				try {
@@ -67,32 +75,43 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	                sql,
 	                p.getLugar(),
 	                p.getPrecio(),
-	                p.getCantEspacio()
+	                p.getCantEspacio(),
+	                p.getId()
 	                
 	        );
 			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ModificarUbicacionException("error al modificar la ubicacion");
 		} finally {
 			if (rs!=null)
 				try {
 					rs.close();
+					cerrarConexion();
 				} catch (SQLException e) {
 					throw new ModificarException(e.getMessage());
 				}
 		}
-		return null;
+	
 	}
 
 	@Override
 	public void borrar(Ubicacion p) throws BorrandoException {
 		String sql = "DELETE FROM UBICACION WHERE ID=?";
 		try {
-			int rows = updateDeleteInsertSql(sql, p.getPrecio());
+			int rows = updateDeleteInsertSql(sql, p.getId());
 			System.out.println("Registros eliminados: "+rows);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BorrandoException(e.getMessage());
+			throw new BorrandoUbicacionException("error al borrar la ubicacion");
+		}finally {
+			
+				try {
+
+					cerrarConexion();
+				} catch (SQLException e) {
+					throw new BorrandoException(e.getMessage());
+				}
 		}
 		
 	}
@@ -101,16 +120,17 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	public void grabar(Ubicacion p) throws GrabandoException {
 
 		String sql = "INSERT INTO UBICACION " +
-				     "(ID_ESTADIOLUGAR,PRECIO,CANTESPACIO) " +
+				     "(LUGAR,PRECIO,CANTESPACIO,ID_ESTADIO) " +
 				     "VALUES (?,?,?,?)";
-
+		
 		try {
 			int rows = updateDeleteInsertSql(
 					sql,
-					p.getIdestadio(),
+					
 					p.getLugar(),
 					p.getPrecio(),
-					p.getCantEspacio()
+					p.getCantEspacio(),
+					p.getIdestadio()
 					
 			);
 
@@ -119,11 +139,19 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			throw new GrabandoException(e.getMessage());
-		}
+			throw new GrabandoUbicacionException("error al grabar la ubicacion");
+		}finally {
+			
+			try {
+				
+				cerrarConexion();
+			} catch (SQLException e) {
+				throw new GrabandoException(e.getMessage());
+			}
+	}
 	}
 	
-	public List<Ubicacion> obtenerPorEstadio(int id) throws LeyendoException {
+	public List<Ubicacion> obtenerPorEstadio(int id) throws LeyendoTodosException {
 		String sql = "SELECT * FROM UBICACION WHERE ID_ESTADIO=?";
 		ResultSet rs=null;
 		Ubicacion p;
@@ -145,15 +173,22 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 				return listaUbicacion;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoTodosUbicacionException("error al leer todas las ubicaciones");
 		} finally {
 			if (rs!=null)
 				try {
 					rs.close();
 					cerrarConexion();
 				} catch (SQLException e) {
-					throw new LeyendoException(e.getMessage());
+					throw new LeyendoTodosException(e.getMessage());
 				}
 		}
+		
+	}
+
+	@Override
+	public List<Ubicacion> leerTodos() throws LeyendoTodosException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -4,6 +4,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import Entidades.Abono;
+import Exceptiones.LeyendoTodosException;
 
 public abstract class H2Base {
 	private final String driver;
@@ -128,4 +132,6 @@ public abstract class H2Base {
 		}
 		return s;
 	}
+
+	
 }

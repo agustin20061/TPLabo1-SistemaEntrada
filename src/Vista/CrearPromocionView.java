@@ -76,7 +76,7 @@ public class CrearPromocionView {
 				String nombre = nombreField.getText();
 				//LocalTime horaInicio= LocalTime.parse(tiempoInicioField.getText());
 				//LocalTime horaFin =LocalTime.parse(tiempoFinalField.getText());
-				float descuento= Integer.parseInt(descuentoField.getText());
+				float descuento= Float.parseFloat(descuentoField.getText());
 				
 				Date fechaInicio = (Date) horaInicioSpinner.getValue();
 

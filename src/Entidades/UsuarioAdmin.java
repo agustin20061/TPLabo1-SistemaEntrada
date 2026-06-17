@@ -1,6 +1,8 @@
 package Entidades;
 
+import Exceptiones.LeyendoException;
 import Vista.UsuarioAdminView;
+import Vista.UsuarioVendedorView;
 
 public class UsuarioAdmin extends Persona{
 
@@ -14,7 +16,17 @@ public class UsuarioAdmin extends Persona{
 		return "UsuarioAdmin ["+super.toString() + "]";
 	}
 
+	 @Override
+	    public void iniciarVentana() throws LeyendoException {
+	       new UsuarioAdminView();
+	    }
 
+	    
+
+	    @Override
+	    public String getRolPersistencia() { return "ADMIN"; }
+		
+	
 
 
 }

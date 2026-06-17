@@ -80,10 +80,7 @@ public class Estadio {
 	}
 
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(foto, id, listaUbicacion, nombre);
-	}
+	
 
 	
 	

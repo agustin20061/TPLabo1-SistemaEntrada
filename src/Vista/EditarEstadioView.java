@@ -94,15 +94,17 @@ public class EditarEstadioView {
 	                });
 
 	                borrarButton.addActionListener(e -> {
-
-	                    estadio.getListaUbicacion().remove(u);
-	                    try {
+	                	try {
 							ubicacionServicio.borrar(u);
+							estadio.getListaUbicacion().remove(u);
+							cargarUbicaciones();
 						} catch (BorrandoException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-	                    cargarUbicaciones();
+	                    
+	                    
+	                    
 	                   
 	                });
 

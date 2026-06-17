@@ -4,11 +4,17 @@ import java.util.List;
 
 import Entidades.Abono;
 import Entidades.Promocion;
+import Exceptiones.AbonoNoEncontradaException;
+import Exceptiones.BorrandoAbonoException;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
+import Exceptiones.GrabandoAbonoException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosAbonoException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.ModificarAbonoException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
@@ -19,7 +25,6 @@ import Persistencia.ICrud;
 public class AbonoServicio implements IABMO<Abono>{
 	
 	private ICrud<Abono> abonoCrud = new CrudAbono();
-	private CrudAbono crudAbono = new CrudAbono();
 	
 	
 	
@@ -30,7 +35,7 @@ public class AbonoServicio implements IABMO<Abono>{
 			return abonoCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new AbonoNoEncontradaException("Abono No Encontrada - ID "+id);
 		}
 	}
 	
@@ -41,7 +46,7 @@ public class AbonoServicio implements IABMO<Abono>{
 			return abonoCrud.modificar(p);
 		} catch (ModificarException e) {
 			e.printStackTrace();
-			throw new ModificarPersonaException("Persona No Modificada ");
+			throw new ModificarAbonoException("abono No Modificada ");
 		}
 	}
 	@Override
@@ -50,27 +55,28 @@ public class AbonoServicio implements IABMO<Abono>{
 			abonoCrud.borrar(p);
 		} catch (BorrandoException e) {
 			e.printStackTrace();
-			throw new BorrandoPersonaException("Persona No Borrada");
+			throw new BorrandoAbonoException("abono No Borrada");
 		}
 		
 	}
 	@Override
-	public void grabar(Abono p) {
+	public void grabar(Abono p) throws GrabandoException {
 		try {
 			
 			abonoCrud.grabar(p);
 		} catch (GrabandoException e) {
 			e.printStackTrace();
-			throw new GrabandoPersonaException("Persona No Creada");
+			throw new GrabandoAbonoException("Abono No Creada");
 		}
 		
 	}
-	public List<Abono> obtenerTodos() {
+	@Override
+	public List<Abono> leerTodos()throws LeyendoTodosException {
 		try {
-			return crudAbono.obtenerTodos();
-		} catch (LeyendoException e) {
+			return abonoCrud.leerTodos();
+		} catch (LeyendoTodosException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new LeyendoTodosAbonoException("leer todas los abonos no se pudo ");
 		}
 	}
 

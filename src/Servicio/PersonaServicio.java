@@ -1,11 +1,15 @@
 package Servicio;
 
+import java.util.List;
+
 import Entidades.Persona;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoTodosPersonaException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
@@ -66,5 +70,16 @@ public class PersonaServicio implements IABMO<Persona>{
 			throw new GrabandoPersonaException("Persona No Creada");
 		}
 		
+	}
+
+
+	@Override
+	public List<Persona> leerTodos() throws LeyendoTodosException {
+		try {
+			return personaCrud.leerTodos();
+		} catch (LeyendoTodosException e) {
+			e.printStackTrace();
+			throw new LeyendoTodosPersonaException("Personas No Encontradas");
+		}
 	}
 }

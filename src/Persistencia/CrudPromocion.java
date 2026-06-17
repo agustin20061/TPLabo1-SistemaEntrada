@@ -10,10 +10,16 @@ import Entidades.Estadio;
 import Entidades.Promocion;
 import Entidades.Ubicacion;
 import Exceptiones.BorrandoException;
+import Exceptiones.BorrandoPromocionException;
 import Exceptiones.GrabandoException;
+import Exceptiones.GrabandoPromocionException;
 import Exceptiones.LeyendoException;
 import Exceptiones.LeyendoPersonaException;
+import Exceptiones.LeyendoPromocionException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoTodosPromocionException;
 import Exceptiones.ModificarException;
+import Exceptiones.ModificarPromocionException;
 
 public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 	
@@ -38,12 +44,14 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 						    rs.getFloat("DESCUENTO")
 						    
 						);
+					p.setId(id);
 					return p;
 				
 			}
-				throw new LeyendoPersonaException("Registro no encontrado");
+				
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoPromocionException("Registro no encontrado");
 		} finally {
 			if (rs!=null)
 				try {
@@ -74,17 +82,17 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 	        return p;
 
 	    } catch (SQLException e) {
-	        throw new ModificarException(e.getMessage());
+	        throw new ModificarPromocionException("error al modificar la promocion");
 	    } finally {
 	        try {
 				cerrarConexion();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new ModificarException(e.getMessage());
 			}
 	    }
 	}
-
 	@Override
 	public void borrar(Promocion p) throws BorrandoException {
 		String sql = "DELETE FROM PROMOCION WHERE ID=?";
@@ -93,18 +101,18 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 			System.out.println("Registros eliminados: "+rows);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BorrandoException(e.getMessage());
-		}finally {
-	        try {
-				cerrarConexion();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    }	
-		
+			throw new BorrandoPromocionException("error al borrar la promocion");
+		}
+		 finally {
+		        try {
+					cerrarConexion();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new BorrandoException(e.getMessage());
+				}
+		    }
 	}
-
 	@Override
 	public void grabar(Promocion p) throws GrabandoException {
 
@@ -125,45 +133,20 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 		} catch (SQLException e) {
 
 			e.printStackTrace();
-			throw new GrabandoException(e.getMessage());
+			throw new GrabandoPromocionException("error al grabar la promocion");
 		}finally {
 	        try {
 				cerrarConexion();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new GrabandoException(e.getMessage());
 			}
 	    }
 	}
 
-	/*public int obtenerID(String nombre) throws LeyendoException {
-		String sql = "SELECT ID FROM ESTADIO WHERE NOMBRE=?";
-		ResultSet rs=null;
-		int p;
-		try {
-			rs = selectSql(sql, nombre);
-			if (rs.next()) {
-				
-					p = rs.getInt("ID");
-					return p;
-				
-			}
-				throw new LeyendoPersonaException("Registro no encontrado");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (rs!=null)
-				try {
-					rs.close();
-					cerrarConexion();
-				} catch (SQLException e) {
-					throw new LeyendoException(e.getMessage());
-				}
-		}
-		return -1;
-	}*/
-
-	public List<Promocion> obtenerTodos() throws LeyendoException{
+	@Override
+	public List<Promocion> leerTodos() throws LeyendoTodosException{
 		String sql = "SELECT ID, NOMBRE, FECHAINICIO, FECHAFIN, DESCUENTO FROM PROMOCION";
 		ResultSet rs=null;
 		
@@ -182,16 +165,16 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoTodosPromocionException(e.getMessage());
 		} finally {
 			if (rs!=null)
 				try {
 					rs.close();
 					cerrarConexion();
 				} catch (SQLException e) {
-					throw new LeyendoException(e.getMessage());
+					throw new LeyendoTodosException(e.getMessage());
 				}
 		}
-		return null;
 	}
 
 	

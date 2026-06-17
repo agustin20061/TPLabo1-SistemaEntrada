@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import Entidades.Espectaculo;
 import Entidades.Estadio;
 import Entidades.Ubicacion;
+import Exceptiones.LeyendoTodosException;
 import Persistencia.CrudUbicacion;
 import Servicio.EspectaculoServicio;
 import Servicio.EstadioServicio;
@@ -40,7 +41,12 @@ public class GestionarEstadiosView {
 	}
 	
 	private void crearVentana() {
-		listaEstadio=estadioServicio.obtenerTodos();
+		try {
+			listaEstadio=estadioServicio.leerTodos();
+		} catch (LeyendoTodosException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		frame = new JFrame("Gestionar Espectaculo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -94,10 +100,7 @@ public class GestionarEstadiosView {
 
 		    info.add(new JLabel("Ubicaciones:"));
 
-		    /*List<Ubicacion> ubicaciones =
-		            crudUbicacion.obtenerPorEstadio(
-		                    estadio.getId()
-		            );*/
+		   
 
 		    if(estadio.getListaUbicacion().isEmpty()) {
 
@@ -135,11 +138,11 @@ public class GestionarEstadiosView {
 		    btnModificar.addActionListener(e -> {
 		        try {
 
-		            new ModificarEstadioView(estadio);
-
+		            new EditarEstadioView(estadio);
+		            frame.dispose();
 		        } catch (Exception ex) {
 
-		            mostrarError(ex.getMessage());
+		            ex.getMessage();
 		        }
 		    });
 
@@ -147,10 +150,11 @@ public class GestionarEstadiosView {
 		        try {
 
 		            estadioServicio.borrar(estadio);
-
+		            frame.dispose();
+		            new GestionarEstadiosView();
 		        } catch (Exception ex) {
 
-		            mostrarError(ex.getMessage());
+		            ex.getMessage();
 		        }
 		    });
 
@@ -169,7 +173,7 @@ public class GestionarEstadiosView {
 		buttonAgregarEstadio.addActionListener( e -> {
 			try {
 				new CrearEstadioView();
-				
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));
@@ -182,7 +186,7 @@ public class GestionarEstadiosView {
 		buttonSalir.addActionListener( e -> {
 			try {
 				new UsuarioAdminView();
-				
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));

@@ -19,7 +19,7 @@ public class EditarPersonaView {
 	private JFrame frame;
 	private JButton button = new JButton("Edicion completa");
 	private JLabel mailLabel = new JLabel("Mail");
-	private JLabel contraseniaLabel = new JLabel("Contraseña");
+	private JLabel contraseniaLabel = new JLabel("ContraseÃ±a");
 	private JTextField mailField = new JTextField();
 	private JPasswordField contraseniaField = new JPasswordField();
 	private JLabel nombreLabel = new JLabel("Nombre");
@@ -37,7 +37,7 @@ public class EditarPersonaView {
 	}
 	
 	private void crearVentana() {
-		frame = new JFrame("Ventana nueva");
+		frame = new JFrame("Editar Persona");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(5, 2));
@@ -63,7 +63,10 @@ public class EditarPersonaView {
 
 		apellidoField.setText(persona.getApellido());
 		panel.add(apellidoField);
-
+		
+		panel.add(dniLabel);
+		dniField.setText(String.valueOf(persona.getDni()));
+		panel.add(dniField);
 		
 		
 		frame.getContentPane().add(panel);
@@ -73,17 +76,19 @@ public class EditarPersonaView {
 		frame.setVisible(true);
 	}
 	
-	private void setearBoton(int dni) {
+	private void setearBoton(int id) {
 		button.addActionListener( e -> {
 			try {
 				String mail = mailField.getText();
 				String contrasenia = new String(contraseniaField.getPassword());
 				String nombre= nombreField.getText();
 				String apellido= apellidoField.getText();
+				int dni = Integer.parseInt(dniField.getText());
 				Persona p=new UsuarioComun(nombre,apellido,dni,mail,contrasenia);
+				p.setId(id);
 				System.out.println(personaServicio.modificar(p));
 				frame.dispose();
-				new UsuarioComunView(p);
+				new GestionarUsuarioView();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));

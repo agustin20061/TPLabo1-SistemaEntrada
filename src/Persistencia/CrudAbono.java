@@ -8,10 +8,16 @@ import java.util.List;
 
 import Entidades.Abono;
 import Entidades.Promocion;
+import Exceptiones.BorrandoAbonoException;
 import Exceptiones.BorrandoException;
+import Exceptiones.GrabandoAbonoException;
 import Exceptiones.GrabandoException;
+import Exceptiones.LeyendoAbonoException;
 import Exceptiones.LeyendoException;
 import Exceptiones.LeyendoPersonaException;
+import Exceptiones.LeyendoTodosAbonoException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.ModificarAbonoException;
 import Exceptiones.ModificarException;
 
 public class CrudAbono extends H2Base implements ICrud<Abono>{
@@ -36,11 +42,11 @@ public class CrudAbono extends H2Base implements ICrud<Abono>{
 						    rs.getInt("CANT_ENTRADAS")
 						    
 						);
-					a.setId(rs.getInt("ID"));
+					a.setId(id);
 					return a;
 				
 			}
-				throw new LeyendoPersonaException("Registro no encontrado");
+				throw new LeyendoAbonoException("Registro no encontrado");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -68,17 +74,17 @@ public class CrudAbono extends H2Base implements ICrud<Abono>{
 	            p.getCantEntradas(),
 	            p.getId()
 	        );
-
 	        return p;
-
 	    } catch (SQLException e) {
-	        throw new ModificarException(e.getMessage());
+	    	e.printStackTrace();
+	    	throw new ModificarAbonoException("Abono no modificado");
 	    } finally {
 	        try {
 				cerrarConexion();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new ModificarException(e.getMessage());
 			}
 	    }
 	}
@@ -91,13 +97,13 @@ public class CrudAbono extends H2Base implements ICrud<Abono>{
 			System.out.println("Registros eliminados: "+rows);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BorrandoException(e.getMessage());
+			throw new BorrandoAbonoException("Abono no borrado");
 		}finally {
 	        try {
 				cerrarConexion();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new BorrandoException(e.getMessage());
 			}
 	    }	
 		
@@ -120,22 +126,22 @@ public class CrudAbono extends H2Base implements ICrud<Abono>{
 			System.out.println("Registros insertados: " + rows);
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-			throw new GrabandoException(e.getMessage());
+			throw new GrabandoAbonoException("Abono no creado");
 		}finally {
 	        try {
 				cerrarConexion();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new GrabandoException(e.getMessage());
 			}
 	    }
 	}
 
 
-
-	public List<Abono> obtenerTodos() throws LeyendoException{
+	@Override
+	public List<Abono> leerTodos() throws LeyendoTodosException{
 		String sql = "SELECT ID, NOMBRE,PRECIO,CANT_ENTRADAS FROM ABONO";
 		ResultSet rs=null;
 		
@@ -154,16 +160,16 @@ public class CrudAbono extends H2Base implements ICrud<Abono>{
 			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new LeyendoTodosAbonoException("Error en leer todos los abonos");
 		} finally {
 			if (rs!=null)
 				try {
 					rs.close();
 					cerrarConexion();
 				} catch (SQLException e) {
-					throw new LeyendoException(e.getMessage());
+					throw new LeyendoTodosException(e.getMessage());
 				}
 		}
-		return null;
 	}
 
 	

@@ -16,9 +16,12 @@ import javax.swing.JTextField;
 
 import Entidades.Espectaculo;
 import Entidades.Promocion;
+import Exceptiones.BotonBorrarPromocionException;
+import Exceptiones.BotonModificarPromocionException;
+import Exceptiones.LeyendoTodosException;
 import Servicio.EspectaculoServicio;
 import Servicio.PromocionServicio;
-
+import Exceptiones.LeyendoTodosException;
 public class GestionarPromocionView {
 	private JFrame frame;
 	private JButton buttonAgregarPromocion = new JButton("Agregar Promocion");
@@ -31,8 +34,12 @@ public class GestionarPromocionView {
 		agregarPromocionBoton();
 		salirBoton();
 	}
-	private void crearVentana() {
-	listaPromocion=promocionServicio.obtenerTodos();
+	private void crearVentana()  {
+	try {
+		listaPromocion=promocionServicio.leerTodos();
+	} catch (LeyendoTodosException e) {
+		e.printStackTrace();
+	}
 	frame = new JFrame("Gestionar Promociones");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel panel = new JPanel();
@@ -85,7 +92,8 @@ public class GestionarPromocionView {
             try {
                 new EditarPromocionView(promocion);
             } catch (Exception ex) {
-                mostrarError(ex.getMessage());
+            	ex.printStackTrace();
+                throw new BotonModificarPromocionException("error al modificar la promocion");
             }
         });
 
@@ -95,7 +103,8 @@ public class GestionarPromocionView {
             	 frame.dispose();
                  new GestionarPromocionView();
             } catch (Exception ex) {
-                mostrarError(ex.getMessage());
+            	ex.printStackTrace();
+            	throw new  BotonBorrarPromocionException("error al borrar la promocion");
             }
         });
 

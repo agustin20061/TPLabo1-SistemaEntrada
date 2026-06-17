@@ -1,5 +1,8 @@
 package Entidades;
 
+import Exceptiones.LeyendoException;
+import Vista.UsuarioVendedorView;
+
 public class UsuarioVendedor extends Persona{
 
 	public UsuarioVendedor(String nombre, String apellido, int dni, String mail, String contrasenia) {
@@ -9,5 +12,15 @@ public class UsuarioVendedor extends Persona{
 
 	
 	
+	 @Override
+	    public void iniciarVentana() throws LeyendoException {
+	       new UsuarioVendedorView();
+	    }
+
+	    
+
+	    @Override
+	    public String getRolPersistencia() { return "VENDEDOR"; }
+		
 	
 }

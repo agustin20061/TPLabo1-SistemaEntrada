@@ -2,8 +2,11 @@ package Persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import Entidades.Persona;
+import Entidades.Promocion;
 import Entidades.UsuarioAdmin;
 import Entidades.UsuarioComun;
 import Entidades.UsuarioVendedor;
@@ -11,6 +14,8 @@ import Exceptiones.BorrandoException;
 import Exceptiones.GrabandoException;
 import Exceptiones.LeyendoException;
 import Exceptiones.LeyendoPersonaException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.LeyendoTodosPersonaException;
 import Exceptiones.ModificarException;
 
 public class CrudPersona extends H2Base implements ICrud<Persona>{
@@ -21,41 +26,22 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 	}
 	
 	public Persona iniciarSesion(String mail,String contrasenia) throws LeyendoException {
-		String sql = "SELECT DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL FROM PERSONAS WHERE MAIL=? AND CONTRASENIA=?";
+		String sql = "SELECT DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL,ID FROM PERSONAS WHERE MAIL=? AND CONTRASENIA=?";
 		ResultSet rs=null;
 		Persona p;
 		try {
 			rs = selectSql(sql, mail,contrasenia);
 			if (rs.next()) {
-				if(rs.getString(6).equals("ADMIN")) {
-					p = new UsuarioAdmin(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					return p;
-				}else if(rs.getString(6).equals("COMUN")) {
-					p = new UsuarioComun(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					//aca iria el usuario normal
-					return p;
-				} else if(rs.getString(6).equals("VENDEDOR")){
-					p = new UsuarioVendedor(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					return p;
-				}
+				p = PersonaFactory.crearPersona(
+				        rs.getString("ROL"),
+				        rs.getString("NOMBRE"),
+				        rs.getString("APELLIDO"),
+				        rs.getInt("DNI"),
+				        rs.getString("MAIL"),
+				        rs.getString("CONTRASENIA")
+				);
+				p.setId(rs.getInt("ID"));
+				return p;
 			}
 				throw new LeyendoPersonaException("Registro no encontrado");
 		} catch (SQLException e) {
@@ -73,42 +59,23 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 		
 	}
 	@Override
-	public Persona leer(int dni) throws LeyendoException {
-		String sql = "SELECT  DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL FROM PERSONAS WHERE DNI=?";
+	public Persona leer(int id) throws LeyendoException {
+		String sql = "SELECT  DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA,ROL FROM PERSONAS WHERE ID=?";
 		ResultSet rs=null;
 		Persona p;
 		try {
-			rs = selectSql(sql, dni);
+			rs = selectSql(sql, id);
 			if (rs.next()) {
-				if(rs.getString(6).equals("ADMIN")) {
-					p = new UsuarioAdmin(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					return p;
-				}else if(rs.getString(6).equals("COMUN")) {
-					p = new UsuarioComun(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					//aca iria el usuario normal
-					return p;
-				} else if(rs.getString(6).equals("VENDEDOR")){
-					p = new UsuarioVendedor(
-					        rs.getString(2),
-					        rs.getString(3),
-					        rs.getInt(1),
-					        rs.getString(4),
-					        rs.getString(5)
-					);
-					return p;
-				}
+				p = PersonaFactory.crearPersona(
+				        rs.getString("ROL"),
+				        rs.getString("NOMBRE"),
+				        rs.getString("APELLIDO"),
+				        rs.getInt("DNI"),
+				        rs.getString("MAIL"),
+				        rs.getString("CONTRASENIA")
+				);
+				p.setId(rs.getInt("ID"));
+				return p;
 			}
 				throw new LeyendoPersonaException("Registro no encontrado");
 		} catch (SQLException e) {
@@ -128,16 +95,17 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 
 	@Override
 	public Persona modificar(Persona p) throws ModificarException {
-		String sql = "UPDATE PERSONAS SET NOMBRE=?,APELLIDO=?,MAIL=?,CONTRASENIA=? WHERE DNI=?";
+		String sql = "UPDATE PERSONAS SET NOMBRE=?,APELLIDO=?,DNI=?,MAIL=?,CONTRASENIA=? WHERE ID=?";
 		ResultSet rs=null;
 		try {
 			int rows = updateDeleteInsertSql(
 	                sql,
 	                p.getNombre(),
 	                p.getApellido(),
+	                p.getDni(),
 	                p.getMail(),
 	                p.getContrasenia(),
-	                p.getDni()
+	                p.getId()
 	        );
 			return p;
 		} catch (SQLException e) {
@@ -175,18 +143,6 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 
 		try {
 
-			String rol = "COMUN";
-
-			/*if (p instanceof UsuarioAdmin) {
-				rol = "ADMIN";
-
-			} else if (p instanceof UsuarioComun) {
-				rol = "COMUN";
-
-			} else if (p instanceof UsuarioVendedor) {
-				rol = "VENDEDOR";
-			}*/
-
 			int rows = updateDeleteInsertSql(
 					sql,
 					p.getDni(),
@@ -194,7 +150,7 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 					p.getApellido(),
 					p.getMail(),
 					p.getContrasenia(),
-					rol
+					p.getRolPersistencia()
 			);
 
 			System.out.println("Registros insertados: " + rows);
@@ -204,6 +160,44 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 			e.printStackTrace();
 			throw new GrabandoException(e.getMessage());
 		}
+	}
+
+	@Override
+	public List<Persona> leerTodos() throws LeyendoTodosException {
+		String sql = "SELECT  ID,DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA FROM PERSONAS WHERE ROL=?";
+		ResultSet rs=null;
+		Persona p;
+		List<Persona> pe  = new ArrayList<>();
+		String rol="COMUN";
+		try {
+			rs = selectSql(sql, rol);
+			while (rs.next()) {
+
+					p = new UsuarioComun(
+					        rs.getString("NOMBRE"),
+					        rs.getString("APELLIDO"),
+					        rs.getInt("DNI"),
+					        rs.getString("MAIL"),
+					        rs.getString("CONTRASENIA")
+					);
+					p.setId(rs.getInt("ID"));
+					pe.add(p);
+				}
+				return pe;
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new LeyendoTodosPersonaException("Registro no encontrado");
+		} finally {
+			if (rs!=null)
+				try {
+					rs.close();
+					cerrarConexion();
+				} catch (SQLException e) {
+					throw new LeyendoTodosException(e.getMessage());
+				}
+		}
+		
 	}
 		
 	}

@@ -26,6 +26,12 @@ public class Promocion {
 			this.tiempoFinal = tiempoFinal;
 			this.descuento = descuento;
 		}
+	public Promocion(String nombre, LocalTime tiempoInicio, LocalTime tiempoFinal, float descuento) {
+	    this.nombre = nombre;
+	    this.tiempoInicio = tiempoInicio;
+	    this.tiempoFinal = tiempoFinal;
+	    this.descuento = descuento;
+	}
 
 	public String getNombre() {
 		return nombre;

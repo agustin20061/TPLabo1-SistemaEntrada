@@ -62,6 +62,9 @@ public class Ubicacion {
 		this.idEstadio = idestadio;
 	}
 	
-	
+	@Override
+	public String toString() {
+	    return lugar;
+	}
 	
 }

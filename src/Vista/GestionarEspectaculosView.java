@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import Entidades.Espectaculo;
 import Entidades.Ubicacion;
+import Exceptiones.LeyendoTodosException;
 import Persistencia.CrudUbicacion;
 import Servicio.EspectaculoServicio;
 
@@ -41,7 +42,11 @@ public class GestionarEspectaculosView {
 	}
 	
 	private void crearVentana() {
-		listaEspectaculo=espectaculoServicio.obtenerTodos();
+		try {
+	    listaEspectaculo = espectaculoServicio.leerTodos();
+	} catch (LeyendoTodosException e) {
+	    e.printStackTrace();
+	}
 		frame = new JFrame("Gestionar Espectaculo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -99,17 +104,20 @@ public class GestionarEspectaculosView {
 
 	        btnModificar.addActionListener(e -> {
 	            try {
+	            	frame.dispose();
 	                new EditarEspectaculoView(espectaculo);
 	            } catch (Exception ex) {
-	                mostrarError(ex.getMessage());
+	                ex.getMessage();
 	            }
 	        });
 
 	        btnBorrar.addActionListener(e -> {
 	            try {
 	            	espectaculoServicio.borrar(espectaculo);
+	            	frame.dispose();
+	            	new GestionarEspectaculosView();
 	            } catch (Exception ex) {
-	                mostrarError(ex.getMessage());
+	               ex.getMessage();
 	            }
 	        });
 
@@ -137,7 +145,7 @@ public class GestionarEspectaculosView {
 	}
 	private void salirBoton() {
 		
-		buttonAgregarEspectaculo.addActionListener( e -> {
+		buttonSalir.addActionListener( e -> {
 			try {
 				new UsuarioAdminView();
 				

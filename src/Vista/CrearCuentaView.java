@@ -17,9 +17,9 @@ import Servicio.PersonaServicio;
 
 public class CrearCuentaView {
 	private JFrame frame;
-	private JButton button = new JButton("click aqui");
+	private JButton button = new JButton("Crear Usuario");
 	private JLabel mailLabel = new JLabel("Mail");
-	private JLabel contraseniaLabel = new JLabel("Contraseña");
+	private JLabel contraseniaLabel = new JLabel("ContraseÃ±a");
 	private JTextField mailField = new JTextField();
 	private JPasswordField contraseniaField = new JPasswordField();
 	private JLabel nombreLabel = new JLabel("Nombre");
@@ -36,7 +36,7 @@ public class CrearCuentaView {
 	}
 	
 	private void crearVentana() {
-		frame = new JFrame("Ventana nueva");
+		frame = new JFrame("Crear Usuario");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(5, 2));
@@ -70,7 +70,7 @@ public class CrearCuentaView {
 				UsuarioComun p=new UsuarioComun(nombre,apellido,dni,mail,contrasenia);
 				personaServicio.grabar(p);
 				frame.dispose();
-				new UsuarioComunView(p);
+				new GestionarUsuarioView();
 				System.out.println("se creo exitosamente");
 				
 				

@@ -1,5 +1,7 @@
 package Entidades;
 
+import Exceptiones.LeyendoException;
+
 public abstract class Persona {
 	private int id;
 	private String nombre;
@@ -71,6 +73,9 @@ public abstract class Persona {
 	}
 	
 	
-	
+	   public abstract void iniciarVentana() throws LeyendoException;
+
+	    public abstract String getRolPersistencia(); 
+
 	
 }

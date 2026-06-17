@@ -4,11 +4,17 @@ import java.util.List;
 
 import Entidades.Estadio;
 import Entidades.Ubicacion;
+import Exceptiones.BorrandoEstadioException;
 import Exceptiones.BorrandoException;
 import Exceptiones.BorrandoPersonaException;
+import Exceptiones.EstadioNoEncontradaException;
+import Exceptiones.GrabandoEstadioException;
 import Exceptiones.GrabandoException;
 import Exceptiones.GrabandoPersonaException;
 import Exceptiones.LeyendoException;
+import Exceptiones.LeyendoTodosEstadioException;
+import Exceptiones.LeyendoTodosException;
+import Exceptiones.ModificarEstadioException;
 import Exceptiones.ModificarException;
 import Exceptiones.ModificarPersonaException;
 import Exceptiones.PersonaNoEncontradaException;
@@ -18,7 +24,6 @@ import Persistencia.ICrud;
 
 public class EstadioServicio implements IABMO<Estadio>{
 	private ICrud<Estadio> EstadioCrud = new CrudEstadio();
-	private CrudEstadio crudEstadio= new CrudEstadio();
 	
 	
 	
@@ -28,7 +33,7 @@ public class EstadioServicio implements IABMO<Estadio>{
 			return EstadioCrud.leer(id);
 		} catch (LeyendoException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new EstadioNoEncontradaException("Estadio No Encontrada - ID "+id);
 		}
 	}
 	
@@ -39,7 +44,7 @@ public class EstadioServicio implements IABMO<Estadio>{
 			return EstadioCrud.modificar(p);
 		} catch (ModificarException e) {
 			e.printStackTrace();
-			throw new ModificarPersonaException("Persona No Modificada ");
+			throw new ModificarEstadioException("Estadio No Modificada ");
 		}
 	}
 	@Override
@@ -48,7 +53,7 @@ public class EstadioServicio implements IABMO<Estadio>{
 			EstadioCrud.borrar(p);
 		} catch (BorrandoException e) {
 			e.printStackTrace();
-			throw new BorrandoPersonaException("Persona No Borrada");
+			throw new BorrandoEstadioException("Estadio No Borrada");
 		}
 		
 	}
@@ -58,28 +63,27 @@ public class EstadioServicio implements IABMO<Estadio>{
 			EstadioCrud.grabar(p);
 		} catch (GrabandoException e) {
 			e.printStackTrace();
-			throw new GrabandoPersonaException("Persona No Creada");
+			throw new GrabandoEstadioException("Estadio No Creada");
 		}
 		
 	}
 
-	public int obtenerID(String nombre) {
-		try {
-			return crudEstadio.obtenerID(nombre);
-		} catch (LeyendoException e) {
-			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
-		}
-		
-	}
 
-	public List<Estadio> obtenerTodos() {
+
+	@Override
+	public List<Estadio> leerTodos() throws LeyendoTodosException {
 		try {
-			return crudEstadio.obtenerTodos();
-		} catch (LeyendoException e) {
+			return EstadioCrud.leerTodos();
+		} catch (LeyendoTodosException e) {
 			e.printStackTrace();
-			throw new PersonaNoEncontradaException("Persona No Encontrada - ID "+id);
+			throw new LeyendoTodosEstadioException("leer todos los estadios no se pudo");
 		}
+	}
+	public int obtenerID(String nombre) throws LeyendoException {
+
+	    CrudEstadio crud = new CrudEstadio();
+
+	    return crud.obtenerID(nombre);
 	}
 
 }

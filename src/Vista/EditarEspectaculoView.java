@@ -22,6 +22,7 @@ import Entidades.Espectaculo;
 import Entidades.Estadio;
 import Entidades.Persona;
 import Entidades.UsuarioComun;
+import Exceptiones.LeyendoTodosException;
 import Servicio.EspectaculoServicio;
 import Servicio.EstadioServicio;
 import Servicio.PersonaServicio;
@@ -43,7 +44,12 @@ public class EditarEspectaculoView {
 	private JLabel fechaLabel = new JLabel("Fecha");
 	
 	public EditarEspectaculoView(Espectaculo p) {
-		this.estadios=estadioServicio.obtenerTodos();
+		try {
+			this.estadios=estadioServicio.leerTodos();
+		} catch (LeyendoTodosException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(Estadio e : estadios) {
 		    estadioCombo.addItem(e);
 		}
@@ -76,8 +82,13 @@ public class EditarEspectaculoView {
 		panel.add(estadioCombo);
 
 		panel.add(fechaLabel);
-		fechaSpinner.setValue(espectaculo.getFecha());
-		JSpinner.DateEditor editor = new JSpinner.DateEditor(fechaSpinner, "dd/MM/yyyy");
+
+		Date fechaDate = java.sql.Date.valueOf(espectaculo.getFecha());
+		fechaSpinner.setValue(fechaDate);
+
+		JSpinner.DateEditor editor =
+		        new JSpinner.DateEditor(fechaSpinner, "dd/MM/yyyy");
+
 		fechaSpinner.setEditor(editor);
 		panel.add(fechaSpinner);
 		
@@ -100,7 +111,8 @@ public class EditarEspectaculoView {
 				        fechaSeleccionada.toInstant()
 				                         .atZone(ZoneId.systemDefault())
 				                         .toLocalDate();
-				Espectaculo p=new Espectaculo(id,nombre,estadioSeleccionado,descripcion,fecha);
+				Espectaculo p=new Espectaculo(nombre,estadioSeleccionado,descripcion,fecha);
+				p.setId(id);
 				System.out.println(espectaculoServicio.modificar(p));
 				frame.dispose();
 				new GestionarEspectaculosView();
