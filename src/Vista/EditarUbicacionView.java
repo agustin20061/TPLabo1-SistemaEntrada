@@ -25,25 +25,32 @@ public class EditarUbicacionView {
 	private JLabel cantEspacioLabel = new JLabel("Cantidad de lugares");
 	private JTextField cantEspacioField = new JTextField();
 	private JLabel nombreEstadioLabel = new JLabel("Nombre Del Estadio");
-	/*private JLabel fotoLabel = new JLabel("Foto");
-	private JTextField fotoField = new JTextField();
-	*/
+	private JButton cambiarImagenButton = new JButton("Cambiar imagen");
+	private JLabel imagenSeleccionada = new JLabel();
+	private JLabel imagenLabel = new JLabel();
+	private String rutaFoto;
 	private Estadio estadio;
 	private Ubicacion ubicacion;
 	private UbicacionServicio ubicacionServicio = new UbicacionServicio();
 	
 	public EditarUbicacionView(Ubicacion u,Estadio e) {
-		this.ubicacion=u;
-		this.estadio=e;
-		crearVentana();
-		editarUbicacion();
+		
+
+		    this.ubicacion = u;
+		    this.estadio = e;
+		    this.rutaFoto = ubicacion.getFoto();
+
+		    crearVentana();
+		    setearBotonImagen();
+		    editarUbicacion();
+		
 	}
 	
 	private void crearVentana() {
 		frame = new JFrame("Editar Ubicacion");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(5, 2));
+		panel.setLayout(new GridLayout(7, 2));
 		frame.getContentPane().setLayout(new FlowLayout());
 		panel.add(nombreEstadioLabel);
 		panel.add(new JLabel(estadio.getNombre()));
@@ -60,9 +67,24 @@ public class EditarUbicacionView {
 		panel.add(cantEspacioLabel);
 		cantEspacioField.setText(String.valueOf(ubicacion.getCantEspacio()));
 		panel.add(cantEspacioField);
-		/*panel.add(fotoLabel);
-		panel.add(fotoField);
-		*/
+		if(ubicacion.getFoto() != null && !ubicacion.getFoto().isEmpty()) {
+
+		    imagenSeleccionada.setText(ubicacion.getFoto());
+
+		    imagenLabel.setIcon(
+		        GestorImagenes.obtenerIcono(
+		            ubicacion.getFoto(),
+		            200,
+		            120)
+		    );
+		}
+
+
+		panel.add(new JLabel("Imagen:"));
+		panel.add(imagenSeleccionada);
+
+		panel.add(cambiarImagenButton);
+		panel.add(imagenLabel);
 		
 		frame.getContentPane().add(panel);
 		frame.getContentPane().add(buttonEditarUbicacion);
@@ -77,11 +99,12 @@ public class EditarUbicacionView {
 				String lugar = lugarField.getText();
 				int precio= Integer.parseInt(precioField.getText());
 				int cantLugares= Integer.parseInt(cantEspacioField.getText());
-				Ubicacion u=new Ubicacion(ubicacion.getId(),lugar,precio,cantLugares,ubicacion.getIdestadio());
+				Ubicacion u=new Ubicacion(ubicacion.getId(),lugar,precio,cantLugares,ubicacion.getIdestadio(),rutaFoto);
 				ubicacionServicio.modificar(u);
 				ubicacion.setLugar(lugar);
 				ubicacion.setPrecio(precio);
 				ubicacion.setCantEspacio(cantLugares);
+				ubicacion.setFoto(rutaFoto);
 				frame.dispose();
 				
 			} catch (Exception e1) {
@@ -91,5 +114,28 @@ public class EditarUbicacionView {
 			}
 		});
 	}
-	
+	private void setearBotonImagen(){
+
+	    cambiarImagenButton.addActionListener(e -> {
+
+	        String nuevaRuta =
+	                GestorImagenes.seleccionarYGuardarImagen(frame);
+
+	        if(nuevaRuta != null){
+
+	            rutaFoto = nuevaRuta;
+
+	            imagenSeleccionada.setText(nuevaRuta);
+
+	            imagenLabel.setIcon(
+	                GestorImagenes.obtenerIcono(
+	                    rutaFoto,
+	                    200,
+	                    120)
+	            );
+	        }
+
+	    });
+
+	}
 }

@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,7 +20,8 @@ import Entidades.Ubicacion;
 import Entidades.Venta;
 import Servicio.EspectaculoServicio;
 import Servicio.VentaServicio;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 public class VenderEntradasView {
 
     private JFrame frame;
@@ -34,6 +36,8 @@ public class VenderEntradasView {
     private JButton comprarButton =new JButton("Comprar");
     private EspectaculoServicio espectaculoServicio =new EspectaculoServicio();
     private VentaServicio ventaServicio =new VentaServicio();
+    private JLabel totalLabel = new JLabel("Total");
+    private JLabel totalValorLabel = new JLabel("$0");
     private List<Espectaculo> espectaculos;
 
     public VenderEntradasView() {
@@ -43,7 +47,8 @@ public class VenderEntradasView {
         cargarEspectaculos();
 
         setearComboEspectaculo();
-
+        setearComboUbicacion();
+        setearCantidad();
         setearBotonComprar();
     }
 
@@ -55,19 +60,22 @@ public class VenderEntradasView {
                 JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel =
-                new JPanel(new GridLayout(5, 2));
+                new JPanel(new GridLayout(6, 2));
 
         panel.add(espectaculoLabel);
         panel.add(espectaculoCombo);
 
         panel.add(estadioLabel);
         panel.add(estadioValorLabel);
-
+        
         panel.add(ubicacionLabel);
         panel.add(ubicacionCombo);
 
         panel.add(cantidadLabel);
         panel.add(cantidadField);
+        
+        panel.add(totalLabel);
+        panel.add(totalValorLabel);
 
         frame.getContentPane().setLayout(new FlowLayout());
 
@@ -130,6 +138,7 @@ public class VenderEntradasView {
 
             ubicacionCombo.addItem(u);
         }
+        actualizarTotal();
     }
 
     private void setearBotonComprar() {
@@ -143,8 +152,8 @@ public class VenderEntradasView {
                 LocalDateTime fechaHoy = LocalDateTime.now();
 
                 int cantidad = Integer.parseInt( cantidadField.getText());
-
-                Venta venta =new Venta(espectaculo,espectaculo.getEstadio(),ubicacion,cantidad,fechaHoy,cantidad*ubicacion.getPrecio());
+            
+                Venta venta =new Venta(espectaculo,espectaculo.getEstadio(),ubicacion,cantidad,fechaHoy,ventaServicio.calcularTotal(cantidad * ubicacion.getPrecio()));
 
                 ventaServicio.grabar(venta);
 
@@ -153,10 +162,61 @@ public class VenderEntradasView {
                 new UsuarioVendedorView();
 
             } catch(Exception ex) {
-
-            	ex.printStackTrace();
+            	 JOptionPane.showMessageDialog(
+            	            frame,
+            	            ex.getMessage(),
+            	            "Error",
+            	            JOptionPane.ERROR_MESSAGE);
 
             }
         });
+    }
+    private void actualizarTotal() {
+
+        totalValorLabel.setText("$0");
+
+        try {
+
+            Ubicacion ubicacion = (Ubicacion) ubicacionCombo.getSelectedItem();
+
+            if (ubicacion == null)
+                return;
+
+            if (cantidadField.getText().isBlank())
+                return;
+
+            int cantidad = Integer.parseInt(cantidadField.getText());
+
+            if (cantidad <= 0)
+                return;
+
+            int total = cantidad * ubicacion.getPrecio();
+
+            total = ventaServicio.calcularTotal(total);
+
+            totalValorLabel.setText("$" + total);
+
+        } catch (NumberFormatException e) {
+        	
+        }
+    }
+    private void setearComboUbicacion() {
+
+        ubicacionCombo.addActionListener(e -> actualizarTotal());
+
+    }
+    private void setearCantidad() {
+
+        cantidadField.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+                actualizarTotal();
+
+            }
+
+        });
+
     }
 }

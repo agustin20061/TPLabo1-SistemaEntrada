@@ -26,7 +26,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 	
 	@Override
 	public Estadio leer(int id) throws LeyendoException {
-		String sql = "SELECT NOMBRE FROM ESTADIO WHERE ID=?";
+		String sql = "SELECT NOMBRE,FOTO FROM ESTADIO WHERE ID=?";
 		ResultSet rs=null;
 		Estadio p;
 		try {
@@ -34,8 +34,8 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 			if (rs.next()) {
 				
 					p = new Estadio(
-						    rs.getString("NOMBRE")
-						    
+						    rs.getString("NOMBRE"),
+						    rs.getString("FOTO")
 						);
 					
 					p.setId(id);
@@ -60,12 +60,13 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 
 	@Override
 	public Estadio modificar(Estadio p) throws ModificarException {
-		String sql = "UPDATE ESTADIO SET NOMBRE=? WHERE ID=?";
+		String sql = "UPDATE ESTADIO SET NOMBRE=?,FOTO=? WHERE ID=?";
 		ResultSet rs=null;
 		try {
 			int rows = updateDeleteInsertSql(
 	                sql,
 	                p.getNombre(),
+	                p.getFoto(),
 	                p.getId()
 	                
 	            
@@ -102,13 +103,14 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 	public void grabar(Estadio p) throws GrabandoException {
 
 		String sql = "INSERT INTO ESTADIO " +
-				     "(NOMBRE) " +
-				     "VALUES (?)";
+				     "(NOMBRE,FOTO) " +
+				     "VALUES (?,?)";
 
 		try {
 			int rows = updateDeleteInsertSql(
 					sql,
-					p.getNombre()	
+					p.getNombre(),
+					p.getFoto()
 			);
 			System.out.println("Registros insertados: " + rows);
 
@@ -147,7 +149,7 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 	}
 	@Override
 	public List<Estadio> leerTodos() throws LeyendoTodosException{
-		String sql = "SELECT ID, NOMBRE FROM ESTADIO";
+		String sql = "SELECT ID, NOMBRE,FOTO FROM ESTADIO";
 		ResultSet rs=null;
 		
 		try {
@@ -164,13 +166,13 @@ public class CrudEstadio extends H2Base implements ICrud<Estadio>{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					e=new Estadio( rs.getInt("ID"),rs.getString("NOMBRE"),listaUbicacion);
+					e=new Estadio( rs.getInt("ID"),rs.getString("NOMBRE"),listaUbicacion,rs.getString("FOTO"));
 					p.add(e);
 			}
 			return p;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new LeyendoTodosEstadioException("Error al leer todos los usuarios");
+			throw new LeyendoTodosEstadioException("Error al leer todos los estadios");
 		} finally {
 			if (rs!=null)
 				try {

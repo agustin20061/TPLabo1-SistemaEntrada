@@ -8,27 +8,29 @@ public class Estadio {
 	private int id;
 	private String nombre;
 	private ArrayList<Ubicacion> listaUbicacion;
-	//private String foto;
+	private String foto;
 	
-	public Estadio(String nombre, ArrayList<Ubicacion> listaUbicacion) {//, String foto
+	public Estadio(String nombre, ArrayList<Ubicacion> listaUbicacion,String foto) {
 		this.nombre = nombre;
 		this.listaUbicacion = listaUbicacion;
-		//this.foto = foto;
+		this.setFoto(foto);
 	}
 	
 	
-	public Estadio(String nombre) {
+	public Estadio(String nombre,String foto) {
 		super();
 		this.nombre = nombre;
+		this.foto=foto;
 	}
 	
 
 
-	public Estadio(int id, String nombre, List<Ubicacion> listaUbicacion) {
+	public Estadio(int id, String nombre, List<Ubicacion> listaUbicacion,String foto) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.listaUbicacion = (ArrayList<Ubicacion>) listaUbicacion;
+		this.foto=foto;
 	}
 
 
@@ -55,16 +57,6 @@ public class Estadio {
 		this.listaUbicacion = (ArrayList<Ubicacion>) ubicaciones;
 	}
 
-
-	/*public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
-*/
-
 	public int getId() {
 		return id;
 	}
@@ -77,6 +69,16 @@ public class Estadio {
 	@Override
 	public String toString() {
 	    return nombre;
+	}
+
+
+	public String getFoto() {
+		return foto;
+	}
+
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 

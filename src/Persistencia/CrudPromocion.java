@@ -3,6 +3,7 @@ package Persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,5 +179,52 @@ public class CrudPromocion extends H2Base implements ICrud<Promocion>{
 	}
 
 	
+		public Promocion obtenerPromocion(LocalTime hora) throws LeyendoException {
+
+		    String sql = "SELECT ID, NOMBRE, TIEMPO_INICIO, TIEMPO_FINAL, DESCUENTO "
+		               + "FROM PROMOCION "
+		               + "WHERE ? BETWEEN TIEMPO_INICIO AND TIEMPO_FINAL";
+
+		    ResultSet rs = null;
+
+		    try {
+
+		        rs = selectSql(sql, java.sql.Time.valueOf(hora));
+
+		        if (rs.next()) {
+
+		            Promocion p = new Promocion(
+		                    rs.getString("NOMBRE"),
+		                    rs.getTime("TIEMPO_INICIO"),
+		                    rs.getTime("TIEMPO_FINAL"),
+		                    rs.getFloat("DESCUENTO"));
+
+		            p.setId(rs.getInt("ID"));
+
+		            return p;
+		        }
+
+		        // No hay promoción vigente.
+		        return null;
+
+		    } catch (SQLException e) {
+
+		        e.printStackTrace();
+		        throw new LeyendoPromocionException("Error al buscar la promoción.");
+
+		    } finally {
+
+		        if (rs != null) {
+		            try {
+		                rs.close();
+		                cerrarConexion();
+		            } catch (SQLException e) {
+		                throw new LeyendoException(e.getMessage());
+		            }
+		        }
+		    }
+		
+		
+	}
 
 }

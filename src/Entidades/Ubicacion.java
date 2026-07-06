@@ -7,22 +7,24 @@ public class Ubicacion {
 	private int cantEspacio;
 	private int idEstadio;
 	private String foto;
-	public Ubicacion(int id,String lugar, int precio, int cantEspacio,int idestadio) {
+	public Ubicacion(int id,String lugar, int precio, int cantEspacio,int idestadio, String foto) {
 		super();
 		this.id=id;
 		this.lugar = lugar;
 		this.precio = precio;
 		this.cantEspacio = cantEspacio;
 		this.idEstadio=idestadio;
+		this.foto=foto;
 		
 	}
 	
-	public Ubicacion(String lugar, int precio, int cantEspacio, int idEstadio) {
+	public Ubicacion(String lugar, int precio, int cantEspacio, int idEstadio,String foto) {
 		super();
 		this.lugar = lugar;
 		this.precio = precio;
 		this.cantEspacio = cantEspacio;
 		this.idEstadio = idEstadio;
+		this.foto=foto;
 	}
 
 	public String getLugar() {
@@ -66,5 +68,7 @@ public class Ubicacion {
 	public String toString() {
 	    return lugar;
 	}
+
+	
 	
 }

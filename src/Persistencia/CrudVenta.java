@@ -164,5 +164,41 @@ public class CrudVenta extends H2Base implements ICrud<Venta>{
 				}
 		}
 	}
+	public int obtenerEntradasVendidas(int idEspectaculo, int idUbicacion) throws LeyendoException {
+
+	    String sql = """
+	        SELECT COALESCE(SUM(CANTIDAD),0) AS TOTAL
+	        FROM VENTA
+	        WHERE ID_ESPECTACULO = ?
+	        AND ID_UBICACION = ?
+	        """;
+
+	    ResultSet rs = null;
+
+	    try {
+
+	        rs = selectSql(sql, idEspectaculo, idUbicacion);
+
+	        if(rs.next()) {
+	            return rs.getInt("TOTAL");
+	        }
+
+	        return 0;
+
+	    } catch (SQLException e) {
+
+	        throw new LeyendoVentaException("Error al obtener entradas vendidas");
+
+	    } finally {
+
+	        if(rs != null)
+	            try {
+	                rs.close();
+	                cerrarConexion();
+	            } catch (SQLException e) {
+	                throw new LeyendoException(e.getMessage());
+	            }
+	    }
+	}
 
 }

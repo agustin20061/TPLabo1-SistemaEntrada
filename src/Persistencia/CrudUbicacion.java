@@ -32,7 +32,7 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	
 	@Override
 	public Ubicacion leer(int id) throws LeyendoException {
-		String sql = "SELECT  LUGAR,PRECIO,CANTESPACIO,ID_ESTADIO FROM UBICACION WHERE ID=?";
+		String sql = "SELECT  LUGAR,PRECIO,CANTESPACIO,FOTO,ID_ESTADIO FROM UBICACION WHERE ID=?";
 		ResultSet rs=null;
 		Ubicacion p;
 		try {
@@ -43,7 +43,8 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 						    rs.getString("LUGAR"),
 						    rs.getInt("PRECIO"),
 						    rs.getInt("CANTESPACIO"),
-						    rs.getInt("ID_ESTADIO")
+						    rs.getInt("ID_ESTADIO"),
+						    rs.getString("FOTO")
 						);
 					p.setId(id);
 					return p;
@@ -68,7 +69,7 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 
 	@Override
 	public Ubicacion modificar(Ubicacion p) throws ModificarException {
-		String sql = "UPDATE UBICACION SET LUGAR=?,PRECIO=?,CANTESPACIO=? WHERE ID=?";
+		String sql = "UPDATE UBICACION SET LUGAR=?,PRECIO=?,CANTESPACIO=?,FOTO=? WHERE ID=?";
 		ResultSet rs=null;
 		try {
 			int rows = updateDeleteInsertSql(
@@ -76,6 +77,7 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	                p.getLugar(),
 	                p.getPrecio(),
 	                p.getCantEspacio(),
+	                p.getFoto(),
 	                p.getId()
 	                
 	        );
@@ -120,8 +122,8 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 	public void grabar(Ubicacion p) throws GrabandoException {
 
 		String sql = "INSERT INTO UBICACION " +
-				     "(LUGAR,PRECIO,CANTESPACIO,ID_ESTADIO) " +
-				     "VALUES (?,?,?,?)";
+				     "(LUGAR,PRECIO,CANTESPACIO,ID_ESTADIO,FOTO) " +
+				     "VALUES (?,?,?,?,?)";
 		
 		try {
 			int rows = updateDeleteInsertSql(
@@ -130,7 +132,8 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 					p.getLugar(),
 					p.getPrecio(),
 					p.getCantEspacio(),
-					p.getIdestadio()
+					p.getIdestadio(),
+					p.getFoto()
 					
 			);
 
@@ -165,7 +168,8 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 						    rs.getString("LUGAR"),
 						    rs.getInt("PRECIO"),
 						    rs.getInt("CANTESPACIO"),
-						    rs.getInt("ID_ESTADIO")
+						    rs.getInt("ID_ESTADIO"),
+						    rs.getString("FOTO")
 						);
 					listaUbicacion.add(p);
 				

@@ -1,5 +1,6 @@
 package Vista;
-
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class GestionarEstadiosView {
        
         // PANEL CENTRAL CON 2 COLUMNAS
         JPanel panelEstadios = new JPanel();
-        panelEstadios.setLayout(new GridLayout(0, 2, 10, 10));
+        panelEstadios.setLayout(new GridLayout(0, 1, 10, 10));
         for (Estadio estadio : listaEstadio) {
             panelEstadios.add(crearTarjetaEstadio(estadio));
         }
@@ -84,89 +85,170 @@ public class GestionarEstadiosView {
 		frame.setVisible(true);*/
         
 	}
-	 private JPanel crearTarjetaEstadio(Estadio estadio) {
+	private JPanel crearTarjetaEstadio(Estadio estadio) {
 
-		 JPanel tarjeta = new JPanel(new BorderLayout());
+	    JPanel tarjeta = new JPanel(new BorderLayout());
 
-		    tarjeta.setBorder(
-		            BorderFactory.createTitledBorder(
-		                    estadio.getNombre()
-		            )
-		    );
 
-		    JPanel info = new JPanel();
+	    tarjeta.setBorder(
+	            BorderFactory.createTitledBorder(
+	                    estadio.getNombre()
+	            )
+	    );
 
-		    info.setLayout(new GridLayout(0, 1));
 
-		    info.add(new JLabel("Ubicaciones:"));
+	    // FOTO DEL ESTADIO
+	    JLabel imagenEstadio = new JLabel();
+	    imagenEstadio.setHorizontalAlignment(JLabel.CENTER);
 
-		   
+	    if(estadio.getFoto() != null && !estadio.getFoto().isEmpty()) {
 
-		    if(estadio.getListaUbicacion().isEmpty()) {
+	        imagenEstadio.setIcon(
+	                GestorImagenes.obtenerIcono(
+	                        estadio.getFoto(),
+	                        180,
+	                        120
+	                )
+	        );
+	    }
 
-		        info.add(
-		            new JLabel(
-		                "No tiene ubicaciones cargadas"
-		            )
-		        );
 
-		    } else {
+	    // PANEL DE INFORMACION
+	    JPanel info = new JPanel();
+	    info.setLayout(new GridLayout(0,1));
 
-		        for(Ubicacion u : estadio.getListaUbicacion()) {
 
-		            info.add(
-		                new JLabel(
-		                    u.getLugar()
-		                    + " - $"
-		                    + u.getPrecio()
-		                    + " - "
-		                    + u.getCantEspacio()
-		                    + " lugares"
-		                )
-		            );
-		        }
-		    }
+	    info.add(new JLabel("Ubicaciones:"));
 
-		    tarjeta.add(info, BorderLayout.CENTER);
 
-		    JButton btnModificar =
-		            new JButton("Modificar");
+	    if(estadio.getListaUbicacion().isEmpty()) {
 
-		    JButton btnBorrar =
-		            new JButton("Borrar");
+	        info.add(
+	                new JLabel(
+	                        "No tiene ubicaciones cargadas"
+	                )
+	        );
 
-		    btnModificar.addActionListener(e -> {
-		        try {
 
-		            new EditarEstadioView(estadio);
-		            frame.dispose();
-		        } catch (Exception ex) {
+	    } else {
 
-		            ex.getMessage();
-		        }
-		    });
 
-		    btnBorrar.addActionListener(e -> {
-		        try {
+	        for(Ubicacion u : estadio.getListaUbicacion()) {
 
-		            estadioServicio.borrar(estadio);
-		            frame.dispose();
-		            new GestionarEstadiosView();
-		        } catch (Exception ex) {
 
-		            ex.getMessage();
-		        }
-		    });
+	            JPanel panelUbicacion = new JPanel(new BorderLayout());
 
-		    JPanel panelBotones = new JPanel();
 
-		    panelBotones.add(btnModificar);
-		    panelBotones.add(btnBorrar);
+	            // FOTO DE LA UBICACION
+	            JLabel imagenUbicacion = new JLabel();
 
-		    tarjeta.add(panelBotones, BorderLayout.SOUTH);
 
-		    return tarjeta;
-		}
+	            if(u.getFoto() != null && !u.getFoto().isEmpty()) {
+
+	                imagenUbicacion.setIcon(
+	                        GestorImagenes.obtenerIcono(
+	                                u.getFoto(),
+	                                80,
+	                                60
+	                        )
+	                );
+	            }
+
+
+	            // DATOS DE LA UBICACION
+	            JLabel datosUbicacion = new JLabel(
+	                    u.getLugar()
+	                    + " - $"
+	                    + u.getPrecio()
+	                    + " - "
+	                    + u.getCantEspacio()
+	                    + " lugares"
+	            );
+
+
+	            panelUbicacion.add(
+	                    imagenUbicacion,
+	                    BorderLayout.WEST
+	            );
+
+
+	            panelUbicacion.add(
+	                    datosUbicacion,
+	                    BorderLayout.CENTER
+	            );
+
+
+	            info.add(panelUbicacion);
+
+	        }
+
+	    }
+
+
+	    tarjeta.add(
+	            imagenEstadio,
+	            BorderLayout.NORTH
+	    );
+
+
+	    tarjeta.add(
+	            info,
+	            BorderLayout.CENTER
+	    );
+
+
+	    JButton btnModificar = new JButton("Modificar");
+
+	    JButton btnBorrar = new JButton("Borrar");
+
+
+	    btnModificar.addActionListener(e -> {
+
+	        try {
+
+	            new EditarEstadioView(estadio);
+	            frame.dispose();
+
+	        } catch(Exception ex) {
+
+	            ex.printStackTrace();
+
+	        }
+
+	    });
+
+
+	    btnBorrar.addActionListener(e -> {
+
+	        try {
+
+	            estadioServicio.borrar(estadio);
+	            frame.dispose();
+	            new GestionarEstadiosView();
+
+	        } catch(Exception ex) {
+
+	            ex.printStackTrace();
+
+	        }
+
+	    });
+
+
+	    JPanel panelBotones = new JPanel();
+
+	    panelBotones.add(btnModificar);
+	    panelBotones.add(btnBorrar);
+
+
+	    tarjeta.add(
+	            panelBotones,
+	            BorderLayout.SOUTH
+	    );
+
+
+	    return tarjeta;
+	}
 	
 	private void agregarEstadioBoton() {
 	
