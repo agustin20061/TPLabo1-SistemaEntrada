@@ -17,58 +17,32 @@ import javax.swing.JFrame;
 public class GestorImagenes {
 
     public static String seleccionarYGuardarImagen(JFrame frame) {
-
         JFileChooser chooser = new JFileChooser();
-
         chooser.setDialogTitle("Seleccionar imagen");
-
-        chooser.setFileFilter(
-                new FileNameExtensionFilter(
-                        "Imágenes", "png", "jpg", "jpeg"));
-
+        chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "png", "jpg", "jpeg"));
         int opcion = chooser.showOpenDialog(frame);
-
         if (opcion != JFileChooser.APPROVE_OPTION) {
             return null;
         }
-
         File archivo = chooser.getSelectedFile();
-
         try {
-
             Path carpeta = Paths.get("src/Fotos");
-
             if (!Files.exists(carpeta)) {
                 Files.createDirectories(carpeta);
             }
-
-            String nombreNuevo =
-                    System.currentTimeMillis() + "_" + archivo.getName();
-
+            String nombreNuevo =System.currentTimeMillis() + "_" + archivo.getName();
             Path destino = carpeta.resolve(nombreNuevo);
-
-            Files.copy(
-                    archivo.toPath(),
-                    destino,
-                    StandardCopyOption.REPLACE_EXISTING);
-
+            Files.copy(archivo.toPath(),destino,StandardCopyOption.REPLACE_EXISTING);
             return "Fotos/" + nombreNuevo;
-
         } catch (IOException e) {
 
             e.printStackTrace();
             return null;
         }
     }
-    public static ImageIcon obtenerIcono(String ruta, int ancho, int alto) {
-
+    public static ImageIcon obtenerImagen(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon("src/" + ruta);
-
-        Image imagen = icono.getImage().getScaledInstance(
-                ancho,
-                alto,
-                Image.SCALE_SMOOTH);
-
+        Image imagen = icono.getImage().getScaledInstance(ancho,alto,Image.SCALE_SMOOTH);
         return new ImageIcon(imagen);
     }
 }

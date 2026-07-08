@@ -50,11 +50,30 @@ public class InicializadorDB {
                         CANT_ENTRADAS INT NOT NULL
                     )
                 """);
+                
+                st.execute("""
+                	    CREATE TABLE IF NOT EXISTS PERSONA_ABONO (
+                	        ID INT AUTO_INCREMENT PRIMARY KEY,
+                	        ID_PERSONA INT NOT NULL,
+                	        ID_ABONO INT NOT NULL,
+                	        ENTRADAS_RESTANTES INT NOT NULL,
+                	        ACTIVO BOOLEAN NOT NULL,
 
+                	        CONSTRAINT FK_PERSONA_ABONO_PERSONA
+                	        FOREIGN KEY (ID_PERSONA)
+                	        REFERENCES PERSONA(ID),
+
+                	        CONSTRAINT FK_PERSONA_ABONO_ABONO
+                	        FOREIGN KEY (ID_ABONO)
+                	        REFERENCES ABONO(ID)
+                	    )
+                	""");
+                
                 st.execute("""
                     CREATE TABLE IF NOT EXISTS ESTADIO (
                         ID INT AUTO_INCREMENT PRIMARY KEY,
-                        NOMBRE VARCHAR(100) NOT NULL
+                        NOMBRE VARCHAR(100) NOT NULL,
+                        FOTO VARCHAR(100) NOT NULL
                     )
                 """);
 
@@ -64,6 +83,7 @@ public class InicializadorDB {
                         LUGAR VARCHAR(100) NOT NULL,
                         PRECIO INT NOT NULL,
                         CANTESPACIO INT NOT NULL,
+                        FOTO VARCHAR(100) NOT NULL,
                         ID_ESTADIO INT NOT NULL,
                         CONSTRAINT FK_UBICACION_ESTADIO
                         FOREIGN KEY (ID_ESTADIO)

@@ -96,66 +96,36 @@ public class GestionarEstadiosView {
 	            )
 	    );
 
-
-	    // FOTO DEL ESTADIO
 	    JLabel imagenEstadio = new JLabel();
 	    imagenEstadio.setHorizontalAlignment(JLabel.CENTER);
 
 	    if(estadio.getFoto() != null && !estadio.getFoto().isEmpty()) {
-
 	        imagenEstadio.setIcon(
-	                GestorImagenes.obtenerIcono(
+	                GestorImagenes.obtenerImagen(
 	                        estadio.getFoto(),
 	                        180,
 	                        120
 	                )
 	        );
 	    }
-
-
-	    // PANEL DE INFORMACION
 	    JPanel info = new JPanel();
 	    info.setLayout(new GridLayout(0,1));
-
-
 	    info.add(new JLabel("Ubicaciones:"));
-
-
 	    if(estadio.getListaUbicacion().isEmpty()) {
-
-	        info.add(
-	                new JLabel(
-	                        "No tiene ubicaciones cargadas"
-	                )
-	        );
-
-
+	        info.add(new JLabel("No tiene ubicaciones cargadas"));
 	    } else {
-
-
 	        for(Ubicacion u : estadio.getListaUbicacion()) {
-
-
 	            JPanel panelUbicacion = new JPanel(new BorderLayout());
-
-
-	            // FOTO DE LA UBICACION
 	            JLabel imagenUbicacion = new JLabel();
-
-
 	            if(u.getFoto() != null && !u.getFoto().isEmpty()) {
-
 	                imagenUbicacion.setIcon(
-	                        GestorImagenes.obtenerIcono(
+	                        GestorImagenes.obtenerImagen(
 	                                u.getFoto(),
 	                                80,
 	                                60
 	                        )
 	                );
 	            }
-
-
-	            // DATOS DE LA UBICACION
 	            JLabel datosUbicacion = new JLabel(
 	                    u.getLugar()
 	                    + " - $"
@@ -164,89 +134,45 @@ public class GestionarEstadiosView {
 	                    + u.getCantEspacio()
 	                    + " lugares"
 	            );
-
-
-	            panelUbicacion.add(
-	                    imagenUbicacion,
-	                    BorderLayout.WEST
-	            );
-
-
-	            panelUbicacion.add(
-	                    datosUbicacion,
-	                    BorderLayout.CENTER
-	            );
-
-
+	            panelUbicacion.add(imagenUbicacion,BorderLayout.WEST);
+	            panelUbicacion.add(datosUbicacion,BorderLayout.CENTER);
 	            info.add(panelUbicacion);
 
 	        }
 
 	    }
-
-
 	    tarjeta.add(
 	            imagenEstadio,
 	            BorderLayout.NORTH
 	    );
-
-
 	    tarjeta.add(
 	            info,
 	            BorderLayout.CENTER
 	    );
-
-
 	    JButton btnModificar = new JButton("Modificar");
-
 	    JButton btnBorrar = new JButton("Borrar");
-
-
 	    btnModificar.addActionListener(e -> {
-
 	        try {
-
 	            new EditarEstadioView(estadio);
 	            frame.dispose();
-
 	        } catch(Exception ex) {
-
 	            ex.printStackTrace();
-
 	        }
-
 	    });
-
-
 	    btnBorrar.addActionListener(e -> {
-
 	        try {
-
 	            estadioServicio.borrar(estadio);
 	            frame.dispose();
 	            new GestionarEstadiosView();
-
 	        } catch(Exception ex) {
-
 	            ex.printStackTrace();
-
 	        }
 
 	    });
-
-
 	    JPanel panelBotones = new JPanel();
-
 	    panelBotones.add(btnModificar);
 	    panelBotones.add(btnBorrar);
-
-
-	    tarjeta.add(
-	            panelBotones,
-	            BorderLayout.SOUTH
-	    );
-
-
+	    tarjeta.add(panelBotones,BorderLayout.SOUTH);
 	    return tarjeta;
 	}
 	

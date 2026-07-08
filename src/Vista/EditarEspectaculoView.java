@@ -47,8 +47,12 @@ public class EditarEspectaculoView {
 		try {
 			this.estadios=estadioServicio.leerTodos();
 		} catch (LeyendoTodosException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 JDialog dialog = new JDialog((JFrame) null, "Error", true);
+			    dialog.add(new JLabel(e.getMessage()));
+			    dialog.pack();
+			    dialog.setLocationRelativeTo(null);
+			    dialog.setVisible(true);
+			    return;
 		}
 		for(Estadio e : estadios) {
 		    estadioCombo.addItem(e);

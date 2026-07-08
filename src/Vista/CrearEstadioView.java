@@ -31,7 +31,7 @@ public class CrearEstadioView {
 	private JTextField nombreField = new JTextField();
 	private JButton botonImagen = new JButton("Seleccionar imagen");
 	private JLabel imagenSeleccionada = new JLabel("Ninguna imagen");
-	private String rutaFoto = "";
+	private String rutaFoto = "a";
 	private EstadioServicio  estadioServicio= new EstadioServicio();
 	
 	public CrearEstadioView() {
@@ -64,13 +64,8 @@ public class CrearEstadioView {
 	private void setearBoton() {
 		button.addActionListener( e -> {
 			try {
-				String nombre = nombreField.getText();
-				
-				//String foto= apellidoField.getText();
-				
-				//System.out.println(personaServicio.crearPersona(lugar,precio,cantLugares));
-				
-				
+				new GestionarEstadiosView();
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));

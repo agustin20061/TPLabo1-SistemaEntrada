@@ -62,7 +62,7 @@ public class EditarEstadioView {
 
 	        nombreField.setText(estadio.getNombre());
 	        if(estadio.getFoto() != null && !estadio.getFoto().isEmpty()) {
-	        	imagenLabel.setIcon(GestorImagenes.obtenerIcono(estadio.getFoto(), 200, 120));
+	        	imagenLabel.setIcon(GestorImagenes.obtenerImagen(estadio.getFoto(), 200, 120));
 	            imagenSeleccionada.setText(estadio.getFoto());
 	        }
 	        
@@ -94,23 +94,16 @@ public class EditarEstadioView {
 	        frame.setVisible(true);
 	}
 	protected void cargarUbicaciones() {
-
 	    ubicacionesPanel.removeAll();
-
 	    if(estadio.getListaUbicacion() != null) {
-
 	        for(Ubicacion u : estadio.getListaUbicacion()) {
-
 	            JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-
 	            // Imagen de la ubicación
 	            JLabel imagen = new JLabel();
-
 	            if(u.getFoto() != null && !u.getFoto().isEmpty()) {
 
 	                imagen.setIcon(
-	                    GestorImagenes.obtenerIcono(
+	                    GestorImagenes.obtenerImagen(
 	                        u.getFoto(),
 	                        100,
 	                        70
@@ -118,68 +111,44 @@ public class EditarEstadioView {
 	                );
 
 	            }
-
-
 	            // Datos de la ubicación
 	            JLabel datos = new JLabel(
 	                    "Lugar: " + u.getLugar() +
 	                    " | Precio: $" + u.getPrecio() +
 	                    " | Capacidad: " + u.getCantEspacio()
 	            );
-
-
 	            JButton modificarButton = new JButton("Modificar");
 	            JButton borrarButton = new JButton("Borrar");
-
-
 	            modificarButton.addActionListener(e -> {
-
 	                new EditarUbicacionView(u, estadio);
-
 	            });
-
-
 	            borrarButton.addActionListener(e -> {
-
 	                try {
 
 	                    ubicacionServicio.borrar(u);
 	                    estadio.getListaUbicacion().remove(u);
 	                    cargarUbicaciones();
-
 	                } catch (BorrandoException e1) {
-
 	                    e1.printStackTrace();
-
 	                }
 
 	            });
-
-
 	            // Agregamos todo a la fila
 	            fila.add(imagen);
 	            fila.add(datos);
 	            fila.add(modificarButton);
 	            fila.add(borrarButton);
-
-
 	            ubicacionesPanel.add(fila);
 	        }
 	    }
-
-
 	    ubicacionesPanel.revalidate();
 	    ubicacionesPanel.repaint();
 	}
 	
 	 private void setearBotonAgregarUbicacion() {
-
 	        agregarUbicacionButton.addActionListener(e -> {
-
 	            try {
-
 	                new CrearUbicacionView(estadio);
-
 	            } catch(Exception ex) {
 
 	                JDialog dialog = new JDialog(frame, "Error", true);
@@ -224,7 +193,7 @@ public class EditarEstadioView {
 
                 imagenSeleccionada.setText(new File(rutaFoto).getName());
 
-                imagenLabel.setIcon(GestorImagenes.obtenerIcono(rutaFoto, 200, 120));
+                imagenLabel.setIcon(GestorImagenes.obtenerImagen(rutaFoto, 200, 120));
 
             }
 

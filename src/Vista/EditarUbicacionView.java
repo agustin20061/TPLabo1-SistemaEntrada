@@ -72,7 +72,7 @@ public class EditarUbicacionView {
 		    imagenSeleccionada.setText(ubicacion.getFoto());
 
 		    imagenLabel.setIcon(
-		        GestorImagenes.obtenerIcono(
+		        GestorImagenes.obtenerImagen(
 		            ubicacion.getFoto(),
 		            200,
 		            120)
@@ -118,17 +118,12 @@ public class EditarUbicacionView {
 
 	    cambiarImagenButton.addActionListener(e -> {
 
-	        String nuevaRuta =
-	                GestorImagenes.seleccionarYGuardarImagen(frame);
-
+	        String nuevaRuta =GestorImagenes.seleccionarYGuardarImagen(frame);
 	        if(nuevaRuta != null){
-
 	            rutaFoto = nuevaRuta;
-
 	            imagenSeleccionada.setText(nuevaRuta);
-
 	            imagenLabel.setIcon(
-	                GestorImagenes.obtenerIcono(
+	                GestorImagenes.obtenerImagen(
 	                    rutaFoto,
 	                    200,
 	                    120)

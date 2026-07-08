@@ -91,6 +91,7 @@ public class GestionarPromocionView {
         btnModificar.addActionListener(e -> {
             try {
                 new EditarPromocionView(promocion);
+                frame.dispose();
             } catch (Exception ex) {
             	ex.printStackTrace();
                 throw new BotonModificarPromocionException("error al modificar la promocion");

@@ -28,7 +28,7 @@ public class UsuarioVendedorView {
 
 	private void crearVentana() {
 
-		frame = new JFrame("Usuario Admin");
+		frame = new JFrame("Usuario Vendedor");
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -76,7 +76,7 @@ public class UsuarioVendedorView {
 		buttonComprarAbono.addActionListener( e -> {
 			try {
 				frame.dispose();
-				//new ComprarAbonoView();
+				new VenderAbonoView();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));

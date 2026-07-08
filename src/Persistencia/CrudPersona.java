@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Entidades.Persona;
+import Entidades.PersonaAbono;
 import Entidades.Promocion;
 import Entidades.UsuarioAdmin;
 import Entidades.UsuarioComun;
@@ -168,7 +169,8 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 	public List<Persona> leerTodos() throws LeyendoTodosException {
 		String sql = "SELECT  ID,DNI,NOMBRE,APELLIDO,MAIL,CONTRASENIA FROM PERSONA WHERE ROL=?";
 		ResultSet rs=null;
-		Persona p;
+		UsuarioComun p;
+		CrudPersonaAbono crudPersonaAbono =  new CrudPersonaAbono();;
 		List<Persona> pe  = new ArrayList<>();
 		String rol="COMUN";
 		try {
@@ -182,7 +184,19 @@ public class CrudPersona extends H2Base implements ICrud<Persona>{
 					        rs.getString("MAIL"),
 					        rs.getString("CONTRASENIA")
 					);
+					
 					p.setId(rs.getInt("ID"));
+					
+					  PersonaAbono pa=null;
+					try {
+						pa = crudPersonaAbono.leer(p.getId());
+					} catch (LeyendoException e) {
+						
+						e.printStackTrace();
+					}
+					  p.setPersonaAbono(pa);
+
+			            p.setPersonaAbono(pa);
 					pe.add(p);
 				}
 				return pe;

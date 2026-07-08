@@ -128,7 +128,6 @@ public class CrudUbicacion extends H2Base implements ICrud<Ubicacion>{
 		try {
 			int rows = updateDeleteInsertSql(
 					sql,
-					
 					p.getLugar(),
 					p.getPrecio(),
 					p.getCantEspacio(),

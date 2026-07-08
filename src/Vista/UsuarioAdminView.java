@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -98,8 +99,9 @@ public class UsuarioAdminView {
 	private void setearBotonCerrarSesion() {
 		button.addActionListener( e -> {
 			try {
-				frame.dispose();
 				new IniciarSesionView();
+				frame.dispose();
+				
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));
@@ -115,8 +117,8 @@ public class UsuarioAdminView {
 	private void setearBotonGestionarEspectaculo() {
 		buttonGestionarEspectaculo.addActionListener( e -> {
 			try {
-				frame.dispose();
 				new GestionarEspectaculosView();
+				frame.dispose();
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));
@@ -125,15 +127,12 @@ public class UsuarioAdminView {
 		});
 	}
 		
-	
-
-
-
 	private void setearBotonGestionarEstadio() {
 		buttonGestionarEstadio.addActionListener( e -> {
 			try {
-				frame.dispose();
 				new GestionarEstadiosView();
+				frame.dispose();
+				
 			} catch (Exception e1) {
 				JDialog dialog = new JDialog(frame,"Error",true);
 				dialog.add(new JLabel(e1.getMessage()));
@@ -142,8 +141,6 @@ public class UsuarioAdminView {
 		});
 	}
 	
-
-
 	private void setearBotonVerVentas() {
 
 	    buttonVerVentas.addActionListener(e -> {
@@ -165,7 +162,14 @@ public class UsuarioAdminView {
 	            java.sql.Date fechaHasta =
 	                    new java.sql.Date(
 	                            fechaHastaUtil.getTime());
-
+	            if (fechaDesde.after(fechaHasta)) {
+	                JOptionPane.showMessageDialog(
+	                        frame,
+	                        "La fecha desde no puede ser posterior a la fecha hasta.",
+	                        "Error",
+	                        JOptionPane.ERROR_MESSAGE);
+	                return;
+	            }
 	            frame.dispose();
 
 	            new VerVentasView(
@@ -184,17 +188,15 @@ public class UsuarioAdminView {
 	    buttonGestionarPromocion.addActionListener(e -> {
 
 	        try {
-
+	        	new GestionarPromocionView();
 	            frame.dispose();
-	            new GestionarPromocionView();
+	           
 
 	        } catch (Exception e1) {
 
-	            JDialog dialog =
-	                    new JDialog(frame, "Error", true);
+	            JDialog dialog = new JDialog(frame, "Error", true);
 
-	            dialog.add(
-	                    new JLabel(e1.getMessage()));
+	            dialog.add( new JLabel(e1.getMessage()));
 
 	            dialog.pack();
 	            dialog.setVisible(true);
@@ -206,17 +208,15 @@ public class UsuarioAdminView {
 	    buttonGestionarAbono.addActionListener(e -> {
 
 	        try {
-
+	        	new GestionarAbonosView();
 	            frame.dispose();
-	            new GestionarAbonosView();
+	            
 
 	        } catch (Exception e1) {
 
-	            JDialog dialog =
-	                    new JDialog(frame, "Error", true);
+	            JDialog dialog =new JDialog(frame, "Error", true);
 
-	            dialog.add(
-	                    new JLabel(e1.getMessage()));
+	            dialog.add( new JLabel(e1.getMessage()));
 
 	            dialog.pack();
 	            dialog.setVisible(true);

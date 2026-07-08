@@ -33,7 +33,7 @@ public class IniciarSesionView {
 	}
 	
 	private void crearVentana() {
-		frame = new JFrame("Ventana nueva");
+		frame = new JFrame("Iniciar Sesion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
@@ -55,6 +55,13 @@ public class IniciarSesionView {
 			try {
 				String mail = mailField.getText();
 				String contrasenia = new String(contraseniaField.getPassword());
+				if (mail.isEmpty()) {
+	                throw new Exception("Debe ingresar el mail.");
+	            }
+	            if (contrasenia.isEmpty()) {
+	                throw new Exception("Debe ingresar la contraseña.");
+	            }
+	            
 				Persona p= personaServicio.iniciarSesionPersona(mail,contrasenia);
 				frame.dispose();
 				p.iniciarVentana();

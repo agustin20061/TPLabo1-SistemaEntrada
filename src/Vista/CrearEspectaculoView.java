@@ -48,16 +48,20 @@ public class CrearEspectaculoView {
 	}
 	
 	private void crearVentana() {
+		frame = new JFrame("Crear Espectaculo");
 		try {
 			estadios = estadioServicio.leerTodos();
 		} catch (LeyendoTodosException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JDialog dialog = new JDialog(frame, "Error", true);
+		    dialog.add(new JLabel(e.getMessage()));
+		    dialog.pack();
+		    dialog.setVisible(true);
+		    return;
 		}
 		for(Estadio e : estadios) {
 		    estadioCombo.addItem(e);
 		}
-		frame = new JFrame("Ventana nueva");
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(4, 2));
@@ -102,17 +106,34 @@ public class CrearEspectaculoView {
 				                         .atZone(ZoneId.systemDefault())
 				                         .toLocalDate();
 				Espectaculo p=new Espectaculo(nombre,estadioSeleccionado,descripcion,fecha);
-				System.out.println(nombre);
-				System.out.println(descripcion);
-				System.out.println(estadioSeleccionado);
-				System.out.println(estadioSeleccionado.getId());
-				System.out.println(fecha);
+				if (nombreField.getText().trim().isEmpty()) {
+				    JDialog dialog = new JDialog(frame, "Error", true);
+				    dialog.add(new JLabel("Debe ingresar un nombre."));
+				    dialog.pack();
+				    dialog.setVisible(true);
+				    return;
+				}
+
+				if (descripcionField.getText().trim().isEmpty()) {
+				    JDialog dialog = new JDialog(frame, "Error", true);
+				    dialog.add(new JLabel("Debe ingresar una descripción."));
+				    dialog.pack();
+				    dialog.setVisible(true);
+				    return;
+				}
+				if (fecha.isBefore(LocalDate.now())) {
+				    JDialog dialog = new JDialog(frame, "Error", true);
+				    dialog.add(new JLabel("La fecha del espectáculo no puede ser anterior a la actual."));
+				    dialog.pack();
+				    dialog.setVisible(true);
+				    return;
+				}
+				
 				espectaculoServicio.grabar(p);
 				frame.dispose();
 				new UsuarioAdminView();
 			} catch (Exception e1) {
 				 e1.printStackTrace();
-
 				    JDialog dialog = new JDialog(frame,"Error",true);
 				    dialog.add(new JLabel(String.valueOf(e1)));
 				    dialog.pack();

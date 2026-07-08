@@ -107,7 +107,11 @@ public class GestionarEspectaculosView {
 	            	frame.dispose();
 	                new EditarEspectaculoView(espectaculo);
 	            } catch (Exception ex) {
-	                ex.getMessage();
+	            	JDialog dialog = new JDialog(frame,"Error",true);
+	                dialog.add(new JLabel(ex.getMessage()));
+	                dialog.pack();
+	                dialog.setLocationRelativeTo(frame);
+	                dialog.setVisible(true);
 	            }
 	        });
 
@@ -117,7 +121,11 @@ public class GestionarEspectaculosView {
 	            	frame.dispose();
 	            	new GestionarEspectaculosView();
 	            } catch (Exception ex) {
-	               ex.getMessage();
+	            	JDialog dialog = new JDialog(frame,"Error",true);
+	                dialog.add(new JLabel(ex.getMessage()));
+	                dialog.pack();
+	                dialog.setLocationRelativeTo(frame);
+	                dialog.setVisible(true);
 	            }
 	        });
 

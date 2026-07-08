@@ -76,6 +76,7 @@ public class CrearUbicacionView {
 				ubicacionServicio.grabar(u);
 				frame.dispose();
 				new CrearUbicacionView(estadio);
+				System.out.println("Hola mundo");
 				
 				
 				

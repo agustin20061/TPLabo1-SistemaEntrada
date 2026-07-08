@@ -35,6 +35,10 @@ public class Abono {
 	public void setCantEntradas(int cantEntradas) {
 		this.cantEntradas = cantEntradas;
 	}
+	@Override
+	public String toString() {
+		return nombre ;
+	}
 	
 	
 }

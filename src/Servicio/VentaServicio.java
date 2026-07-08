@@ -4,7 +4,9 @@ import java.sql.Date;
 import java.time.LocalTime;
 import java.util.List;
 
+import Entidades.PersonaAbono;
 import Entidades.Promocion;
+import Entidades.UsuarioComun;
 import Entidades.Venta;
 import Exceptiones.BorrandoException;
 import Exceptiones.GrabandoEspectaculoException;
@@ -95,5 +97,41 @@ public class VentaServicio implements IABMO<Venta>{
 		}
 		return precioBase;
     	
+	}
+	public int calcularTotalConAbono(int precio, UsuarioComun usuario,int cantidad) {
+
+	    int total = calcularTotal(precio); 
+
+	    if(usuario.getPersonaAbono() != null 
+	        && usuario.getPersonaAbono().isActivo()) {
+
+	        PersonaAbono pa = usuario.getPersonaAbono();
+	        int diferencia=cantidad-pa.getEntradasRestantes();
+	        if(diferencia>0) {
+	        	
+	        	int descuentoAbono= pa.getAbono().getPrecio() / pa.getAbono().getCantEntradas();
+	        	descuentoAbono=descuentoAbono*pa.getEntradasRestantes();
+	        	total-=descuentoAbono;
+	        	if(total < 0) {
+		            total = 0;
+		        }
+	        	return total;
+	        }else {
+	        	diferencia= diferencia +pa.getEntradasRestantes();;
+	        	int descuento= pa.getAbono().getPrecio() /
+	    	            pa.getAbono().getCantEntradas();
+	        	descuento=descuento*diferencia;
+	        	total-=descuento;
+	        	if(total < 0) {
+		            total = 0;
+		        }
+	        	return total;
+	        }
+	        
+
+	        
+	    }
+
+	    return total;
 	}
 }

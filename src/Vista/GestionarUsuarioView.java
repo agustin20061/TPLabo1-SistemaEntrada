@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -62,6 +63,9 @@ public class GestionarUsuarioView {
     JPanel panelInferior = new JPanel();
     panelInferior.add(buttonAgregarUsuario);
     panelInferior.add(buttonSalir);
+   
+    
+    
 
     frame.add(scrollPane, BorderLayout.CENTER);
     frame.add(panelInferior, BorderLayout.SOUTH);
@@ -82,10 +86,10 @@ public class GestionarUsuarioView {
         info.add(new JLabel("Dni: " + usuario.getDni()));
         info.add(new JLabel("Mail: " + usuario.getMail()));
         info.add(new JLabel("Contrasenia: " + usuario.getContrasenia()));
-        if(usuario.getAbono()==null) {
+        if(usuario.getPersonaAbono()==null) {
             info.add(new JLabel("Abono: -"));
         } else {
-            info.add(new JLabel("Abono: " + usuario.getAbono().getNombre()));
+            info.add(new JLabel("Abono: " + usuario.getPersonaAbono().getAbono().getNombre()));
         }
         tarjeta.add(info, BorderLayout.CENTER);
 

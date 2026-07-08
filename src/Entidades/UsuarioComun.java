@@ -6,7 +6,7 @@ import Exceptiones.LeyendoException;
 
 public class UsuarioComun extends Persona{
 	
-	private Abono abono;
+	private PersonaAbono personaAbono;
 	
 	private ArrayList<Espectaculo> listaEspectaculo;
 	
@@ -15,12 +15,7 @@ public class UsuarioComun extends Persona{
 		super(nombre, apellido, dni, mail, contrasenia);
 	}
 
-	public Abono getAbono() {
-		return abono;
-	}
-	public void setAbono(Abono abono) {
-		this.abono = abono;
-	}
+	
 	public ArrayList<Espectaculo> getListaEspectaculo() {
 		return listaEspectaculo;
 	}
@@ -36,5 +31,18 @@ public class UsuarioComun extends Persona{
 
     @Override
     public String getRolPersistencia() { return "COMUN"; }
-	
+
+
+	public PersonaAbono getPersonaAbono() {
+		return personaAbono;
+	}
+
+
+	public void setPersonaAbono(PersonaAbono personaAbono) {
+		this.personaAbono = personaAbono;
+	}
+	@Override
+	public String toString() {
+		return nombre+" "+apellido;
+	}
 }
