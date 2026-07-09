@@ -7,11 +7,11 @@ import java.sql.Statement;
 
 public class InicializadorDB {
 
-    private static final String URL = "jdbc:h2:~/test";
-    private static final String USER = "sa";
-    private static final String PASS = "";
+    private final String URL = "jdbc:h2:~/test";
+    private final String USER = "sa";
+    private final String PASS = "";
 
-    public static void inicializar() {
+    public  void inicializar() {
 
         try {
             Class.forName("org.h2.Driver");

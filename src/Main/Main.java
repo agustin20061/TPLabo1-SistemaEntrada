@@ -5,7 +5,8 @@ import Vista.IniciarSesionView;
 
 public class Main {
 	public static void main(String[] args) {
-		InicializadorDB.inicializar();
+		InicializadorDB inicializadorDb=new InicializadorDB();
+		inicializadorDb.inicializar();
 		IniciarSesionView view = new IniciarSesionView();	
 		System.out.println(System.getProperty("user.dir"));	
 	}

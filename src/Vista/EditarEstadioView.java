@@ -25,6 +25,7 @@ import Entidades.Estadio;
 import Entidades.Ubicacion;
 import Exceptiones.BorrandoException;
 import Servicio.EstadioServicio;
+import Servicio.GestorImagenes;
 import Servicio.UbicacionServicio;
 
 public class EditarEstadioView {
@@ -41,6 +42,7 @@ public class EditarEstadioView {
 	private JLabel imagenSeleccionada = new JLabel();
 	private String rutaFoto;
 	private JLabel imagenLabel = new JLabel();
+	private GestorImagenes gestorImagen=new GestorImagenes();
 	
 	public EditarEstadioView(Estadio e) {
 		this.estadio=e;
@@ -62,7 +64,7 @@ public class EditarEstadioView {
 
 	        nombreField.setText(estadio.getNombre());
 	        if(estadio.getFoto() != null && !estadio.getFoto().isEmpty()) {
-	        	imagenLabel.setIcon(GestorImagenes.obtenerImagen(estadio.getFoto(), 200, 120));
+	        	imagenLabel.setIcon(gestorImagen.obtenerImagen(estadio.getFoto(), 200, 120));
 	            imagenSeleccionada.setText(estadio.getFoto());
 	        }
 	        
@@ -103,7 +105,7 @@ public class EditarEstadioView {
 	            if(u.getFoto() != null && !u.getFoto().isEmpty()) {
 
 	                imagen.setIcon(
-	                    GestorImagenes.obtenerImagen(
+	                		gestorImagen.obtenerImagen(
 	                        u.getFoto(),
 	                        100,
 	                        70
@@ -185,7 +187,7 @@ public class EditarEstadioView {
 
         cambiarImagenButton.addActionListener(e -> {
 
-            String nuevaRuta = GestorImagenes.seleccionarYGuardarImagen(frame);
+            String nuevaRuta = gestorImagen.seleccionarYGuardarImagen(frame);
 
             if(nuevaRuta != null) {
 
@@ -193,7 +195,7 @@ public class EditarEstadioView {
 
                 imagenSeleccionada.setText(new File(rutaFoto).getName());
 
-                imagenLabel.setIcon(GestorImagenes.obtenerImagen(rutaFoto, 200, 120));
+                imagenLabel.setIcon(gestorImagen.obtenerImagen(rutaFoto, 200, 120));
 
             }
 

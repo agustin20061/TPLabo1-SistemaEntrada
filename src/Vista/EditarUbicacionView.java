@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import Entidades.Estadio;
 import Entidades.Ubicacion;
 import Servicio.EstadioServicio;
+import Servicio.GestorImagenes;
 import Servicio.UbicacionServicio;
 
 public class EditarUbicacionView {
@@ -32,7 +33,7 @@ public class EditarUbicacionView {
 	private Estadio estadio;
 	private Ubicacion ubicacion;
 	private UbicacionServicio ubicacionServicio = new UbicacionServicio();
-	
+	private GestorImagenes gestorImagen=new GestorImagenes();
 	public EditarUbicacionView(Ubicacion u,Estadio e) {
 		
 
@@ -72,7 +73,7 @@ public class EditarUbicacionView {
 		    imagenSeleccionada.setText(ubicacion.getFoto());
 
 		    imagenLabel.setIcon(
-		        GestorImagenes.obtenerImagen(
+		    		gestorImagen.obtenerImagen(
 		            ubicacion.getFoto(),
 		            200,
 		            120)
@@ -118,12 +119,12 @@ public class EditarUbicacionView {
 
 	    cambiarImagenButton.addActionListener(e -> {
 
-	        String nuevaRuta =GestorImagenes.seleccionarYGuardarImagen(frame);
+	        String nuevaRuta =gestorImagen.seleccionarYGuardarImagen(frame);
 	        if(nuevaRuta != null){
 	            rutaFoto = nuevaRuta;
 	            imagenSeleccionada.setText(nuevaRuta);
 	            imagenLabel.setIcon(
-	                GestorImagenes.obtenerImagen(
+	            		gestorImagen.obtenerImagen(
 	                    rutaFoto,
 	                    200,
 	                    120)

@@ -22,6 +22,7 @@ import Exceptiones.LeyendoTodosException;
 import Persistencia.CrudUbicacion;
 import Servicio.EspectaculoServicio;
 import Servicio.EstadioServicio;
+import Servicio.GestorImagenes;
 
 public class GestionarEstadiosView {
 	private JFrame frame;
@@ -29,7 +30,7 @@ public class GestionarEstadiosView {
 	private JButton buttonModificarEstadio= new JButton("Modificar Estadio");
 	private JButton buttonBorrarEstadio = new JButton("Borrar Estadio");
 	private JButton buttonSalir = new JButton("Salir");
-	
+	private GestorImagenes gestorImagen=new GestorImagenes();
 	
 	private List<Estadio> listaEstadio=new ArrayList<>();
 	private  List<Ubicacion> listaUbicacion=new ArrayList<>();
@@ -101,7 +102,7 @@ public class GestionarEstadiosView {
 
 	    if(estadio.getFoto() != null && !estadio.getFoto().isEmpty()) {
 	        imagenEstadio.setIcon(
-	                GestorImagenes.obtenerImagen(
+	        		gestorImagen.obtenerImagen(
 	                        estadio.getFoto(),
 	                        180,
 	                        120
@@ -119,7 +120,7 @@ public class GestionarEstadiosView {
 	            JLabel imagenUbicacion = new JLabel();
 	            if(u.getFoto() != null && !u.getFoto().isEmpty()) {
 	                imagenUbicacion.setIcon(
-	                        GestorImagenes.obtenerImagen(
+	                		gestorImagen.obtenerImagen(
 	                                u.getFoto(),
 	                                80,
 	                                60

@@ -1,4 +1,4 @@
-package Vista;
+package Servicio;
 
 import java.awt.Image;
 import java.io.File;
@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 
 public class GestorImagenes {
 
-    public static String seleccionarYGuardarImagen(JFrame frame) {
+    public  String seleccionarYGuardarImagen(JFrame frame) {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccionar imagen");
         chooser.setFileFilter(new FileNameExtensionFilter("Imágenes", "png", "jpg", "jpeg"));
@@ -40,7 +40,7 @@ public class GestorImagenes {
             return null;
         }
     }
-    public static ImageIcon obtenerImagen(String ruta, int ancho, int alto) {
+    public  ImageIcon obtenerImagen(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon("src/" + ruta);
         Image imagen = icono.getImage().getScaledInstance(ancho,alto,Image.SCALE_SMOOTH);
         return new ImageIcon(imagen);

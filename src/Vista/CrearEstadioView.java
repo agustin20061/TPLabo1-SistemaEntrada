@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import Entidades.Estadio;
 import Entidades.Persona;
 import Servicio.EstadioServicio;
+import Servicio.GestorImagenes;
 import Servicio.PersonaServicio;
 
 public class CrearEstadioView {
@@ -33,7 +34,7 @@ public class CrearEstadioView {
 	private JLabel imagenSeleccionada = new JLabel("Ninguna imagen");
 	private String rutaFoto = "a";
 	private EstadioServicio  estadioServicio= new EstadioServicio();
-	
+	private GestorImagenes gestorImagen=new GestorImagenes();
 	public CrearEstadioView() {
 		crearVentana();
 		setearBoton();
@@ -95,7 +96,7 @@ public class CrearEstadioView {
 
 	    botonImagen.addActionListener(e -> {
 
-	        rutaFoto = GestorImagenes.seleccionarYGuardarImagen(frame);
+	        rutaFoto = gestorImagen.seleccionarYGuardarImagen(frame);
 
 	        if(rutaFoto != null) {
 

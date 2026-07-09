@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import Entidades.Estadio;
 import Entidades.Ubicacion;
+import Servicio.GestorImagenes;
 import Servicio.PersonaServicio;
 import Servicio.UbicacionServicio;
 
@@ -33,6 +34,7 @@ public class CrearUbicacionView {
 	private String rutaFoto = "";
 	private Estadio estadio;
 	private UbicacionServicio ubicacionServicio = new UbicacionServicio();
+	private GestorImagenes gestorImagen=new GestorImagenes();
 	public CrearUbicacionView(Estadio e) {
 		this.estadio =e;
 		crearVentana();
@@ -102,7 +104,7 @@ public class CrearUbicacionView {
 
 	    botonImagen.addActionListener(e -> {
 
-	        rutaFoto = GestorImagenes.seleccionarYGuardarImagen(frame);
+	        rutaFoto = gestorImagen.seleccionarYGuardarImagen(frame);
 
 	        if(rutaFoto != null){
 
